@@ -16,5 +16,8 @@ module.exports = {
         ],
         lastUpdated: 'Last Updated',
         repo: "blastcloud/guzzler"
+    },
+    markdown: {
+
     }
 };
