@@ -1,7 +1,10 @@
 ---
-title: "Official Documentation"
+title: Guzzler | Official Documentation
 lang: en-US
+footer: MIT Licensed | Copyright © 2019-present Adam Kelso
 ---
+
+<img :src="$withBase('/img/guzzler-logo.svg')" alt="Guzzler Logo" />
 
 Simplify your unit tests that use Guzzle with a mock-like syntax. Guzzler covers the process of setting up a mock handler, recording history of requests, and provides several convenience methods for creating expectations and assertions on that history.
 

@@ -1,3 +1,8 @@
+---
+lang: en-US
+title: Guzzler | Expectations
+---
+
 # Expectations
 
 Expectations are the main way for you to define what you want Guzzler to search for through your Guzzle client's history. They are used in two separate ways:

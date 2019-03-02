@@ -1,3 +1,8 @@
+---
+lang: en-US
+title: Guzzler | Mocking Responses
+---
+
 # Mocking Responses
 
 There are three main ways to provide responses to return from your client; `queueResponse()` and `queueMany()` methods directly on the `guzzler` instance, and `will()` or its alias `willRespond()` on an expectation.

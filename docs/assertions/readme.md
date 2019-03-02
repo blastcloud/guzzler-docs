@@ -1,3 +1,8 @@
+---
+lang: en-US
+title: Guzzler | Assertions
+---
+
 # Assertions
 
 While `Expectation`s work great for cases where you don’t care about the order of requests to your client, you may find times where you want to verify either the order of requests in your client’s history, or you may want to make assertions about the entirety of its history. Guzzler provides several convenience assertions for exactly this scenario.

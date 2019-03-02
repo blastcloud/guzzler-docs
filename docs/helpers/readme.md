@@ -1,3 +1,8 @@
+---
+lang: en-US
+title: Guzzler | Helpers
+---
+
 # Helpers
 
 The following helpers methods can be used in addition to `Expectations` and assertions for any custom logic or checks that need to be made.

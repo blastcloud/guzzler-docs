@@ -1,20 +1,20 @@
 module.exports = {
-    title: 'Guzzler',
+    favicon: './favicon.png',
     themeConfig: {
+        logo: 'img/guzzler-logo.svg',
         updatePopup: true,
         nav: [
             { text: 'Home', link: '/'},
         ],
         sidebar: [
             ['/', 'Home'],
-            'getting-started/',
-            'mocking-responses/',
-            'expectations/',
-            'assertions/',
-            'helpers/'
+            ['getting-started/', 'Getting Started'],
+            ['mocking-responses/', 'Mocking Responses'],
+            ['expectations/', 'Expectations'],
+            ['assertions/', 'Assertions'],
+            ['helpers/', 'Helpers']
         ],
         lastUpdated: 'Last Updated',
-        repo: 'blastcloud/guzzler',
-        editLinks: false
+        repo: "blastcloud/guzzler"
     }
 };
