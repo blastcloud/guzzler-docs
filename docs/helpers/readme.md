@@ -1,5 +1,7 @@
 # Helpers
 
+The following helpers methods can be used in addition to `Expectations` and assertions for any custom logic or checks that need to be made.
+
 ### getHistory(?int $index, $subIndex = null)
 
 To retrieve the client’s raw history, this method can be used.
@@ -43,6 +45,18 @@ $options = $this->guzzler->getHistory(4, 'options');
 *   // ...
 * ]
 */
+```
+
+### historyCount()
+
+Retrieve the total number of requests that were made on the client.
+
+```php
+$this->client->get('/first');
+$this->client->delete('/second');
+
+echo $this->guzzler->historyCount();
+// 2
 ```
 
 ### queueCount()

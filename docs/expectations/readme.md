@@ -1,10 +1,13 @@
 # Expectations
 
-Expectations are the objects you use to define what properties of a request that should be searched for. Rather than instantiating an  `Expectation` directly, you should receive an instance from the main `expects()` method, or in a closure you pass to an [assertion method](assertions.md).
+Expectations are the main way for you to define what you want Guzzler to search for through your Guzzle client's history. They are used in two separate ways:
+
+- To define the number of times you expect a match to be made before your test your code.
+- To assert what Guzzler should search for in your client's history after you test your code.
 
 ### expects(InvokedRecorder $times, $message = message)
 
-To mimic the chainable syntax of PHPUnit mock objects, you can create expectations with PHPUnit’s own InvokedRecorders and the `expects()` method. InvokedRecorders are methods like `$this->once()`, `$this->lessThan($int)`, `$this->never()`, and so on. You may also pass an optional message to be used on errors as the second argument.
+To mimic the chainable syntax of PHPUnit mock objects, you can create expectations with the `expects()` method and PHPUnit’s own **InvokedRecorders**. These are methods like `$this->once()`, `$this->lessThan($int)`, `$this->never()`, and so on. You may also pass an optional message to be used on errors as the second argument.
 
 ```php
 public function testExample()
@@ -15,6 +18,8 @@ public function testExample()
 
 > All methods on expectations are chainable and can lead directly into another method. `$expectation->oneMethod()->anotherMethod()->stillAnother();`
 
+## Available Methods
+
 ### endpoint(string $uri, string $verb), {verb}(string $uri)
 
 To specify the endpoint and method used for an expectation, use the `endpoint()` method or any of the convenience endpoint verb methods.
@@ -24,7 +29,7 @@ $this->guzzler->expects($this->once())
     ->endpoint("/some-url", "GET");
 ```
 
-The following convenience verb methods are also available to shorten your endpoint expectations. `get`, `post`, `put`, `delete`,  `patch`, `options`.
+The following convenience verb methods are available to shorten your code. `get`, `post`, `put`, `delete`,  `patch`, `options`.
 
 ```php
 $this->guzzler->expects($this->any())
@@ -62,7 +67,7 @@ $this->guzzler->expects($this->once())
 
 ### withBody(string $body)
 
-You can expect a certain body on any request by passing a `$body` string to the `withBody()` method.
+You can expect a certain body on a request by passing a `$body` string to the `withBody()` method.
 
 ```php
 $this->guzzler->expects($this->once())
@@ -106,7 +111,34 @@ As a shorthand for multiple `withOption()` calls, you can pass an array of optio
 $this->guzzler->expects($this->once())
     ->withOptions([
         'stream' => true,
-        'verify' => false,
         'allow_redirects' => false
     ]);
+```
+
+### withQuery(array $query, $exclusive = false)
+
+You can expect a set of query parameters to appear in the URL of the request by passing an array of key value pairs to match in the URL. The order of query parameters is not considered, and by default any additional parameters included in the URL are ignored.
+
+```php
+// Example URL: http://example.com/api/v2/customers?from=15&to=25&format=xml
+
+// By default the 'format' parameter is ignored
+$this->guzzler->expects($this->once())
+    ->withQuery([
+        'to' => 25,
+        'from' => 15
+    ]);
+```
+
+To enforce only the URL parameters you specify, a boolean `true` can be passed as the second argument.
+
+```php
+// Example URL: http://example.com/api/v2/customers?from=15&to=25&format=xml
+
+// With the second argument, the 'format' parameter causes the expectation to fail.
+$this->guzzler->expects($this->once())
+    ->withQuery([
+        'to' => 25,
+        'from' => 15
+    ], true);
 ```
