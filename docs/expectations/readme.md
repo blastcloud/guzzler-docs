@@ -120,6 +120,24 @@ $this->guzzler->expects($this->once())
     ]);
 ```
 
+### synchronous()
+
+This method can be used to specify that the request should have been made with a synchronous call; for example, `$client->get()` instead of `$client->getAsync()`.
+
+```php
+$this->guzzler->expects($this->once())
+    ->synchronous();
+```
+
+### asynchronous()
+
+This method can be used to specify that the request should have been made with an asynchronous call; for example, `$client->postAsync()` instead of `$client->post()`.
+
+```php
+$this->guzzler->expects($this->once())
+    ->asynchronous();
+```
+
 ### withQuery(array $query, $exclusive = false)
 
 You can expect a set of query parameters to appear in the URL of the request by passing an array of key value pairs to match in the URL. The order of query parameters is not considered, and by default any additional parameters included in the URL are ignored.
