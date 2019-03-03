@@ -63,3 +63,7 @@ class SomeTest extends TestCase
     }
 }
 ```
+
+---
+
+<p align="center">MIT Licensed | Copyright © 2019-present Adam Kelso</p>
