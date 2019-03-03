@@ -7,8 +7,6 @@ title: Guzzler | Getting Started
 
 ## Requirements
 
-This package requires the following:
-
 1. PHP 7.1+
 2. Guzzle 6
 3. PHPUnit 7 or 8

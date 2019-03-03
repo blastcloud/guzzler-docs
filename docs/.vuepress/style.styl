@@ -1,0 +1,73 @@
+#app:before
+  background linear-gradient(-90deg, red, orange, #ffd600)
+  height 5px
+  content ''
+  position fixed
+  top 0
+  width 100%
+  z-index 10
+
+body
+  background-color #f8f8f8
+
+/* Alternate Homepage
+------------------------------------------------*/
+.home
+  padding-top 2rem
+  .hero
+    .action-button
+      svg
+        margin-bottom -.3em
+
+
+/* Navbar
+------------------------------------------------*/
+.navbar
+  background-color white
+  top 5px
+
+
+/* Sidebar
+------------------------------------------------*/
+a.sidebar-link:hover
+  background-color #f7f7f7
+
+/* Code Blocks
+------------------------------------------------*/
+pre[class*="language-"]
+  margin: 0
+  padding: .75rem 1rem
+
+.content pre, .content pre[class*="language-"]
+  line-height: 1.4
+
+.content pre code, .content pre[class*="language-"] code, .token.class-name, .token.delimiter.important
+  color #4a4a4a
+  font-weight normal
+
+.token.selector, .token.important, .token.atrule, .token.keyword, .token.builtin
+  color #07a
+
+.token.property, .token.constant, .token.symbol
+  color #905
+
+.token.operator
+  color #a67f59
+
+.token.punctuation
+  color #999
+
+.token.boolean, .token.function
+  color #DD4A68
+
+.token.number
+  color #905
+
+.token.char, .token.attr-value, .token.regex, .token.variable
+  color rgb(243, 152, 56)
+
+.token.string
+  color #690
+
+.token.comment, .token.block-comment, .token.prolog, .token.doctype, .token.cdata
+  color #999

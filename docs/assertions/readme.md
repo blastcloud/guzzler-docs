@@ -9,6 +9,8 @@ While `Expectation`s work great for cases where you don’t care about the order
 
 Assertions are also intended to be made after the call to your code under test while `Expectations` are laid out before.
 
+## Available Methods
+
 ### assertNoHistory($message = null)
 
 To assert that your code did not make any requests at all, you can use the `assertNoHistory()` method, and pass an optional message argument.
