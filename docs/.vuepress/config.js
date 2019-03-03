@@ -1,7 +1,4 @@
 module.exports = {
-    head: [
-        ['link', { rel: 'icon', href: './favicon.png' }]
-    ],
     serviceWorker: true,
     themeConfig: {
         logo: '/img/guzzler-logo.svg',
