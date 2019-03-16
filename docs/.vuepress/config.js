@@ -1,5 +1,4 @@
 module.exports = {
-    serviceWorker: true,
     themeConfig: {
         logo: '/img/guzzler-logo.svg',
         updatePopup: true,

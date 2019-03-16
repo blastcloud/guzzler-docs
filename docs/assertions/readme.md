@@ -96,7 +96,7 @@ Assertions can be made in the negative against any specific index or set of inde
 ```php
 $this->guzzler->assertNotIndexes([2, 3, 6], function ($expect) {
     return $expect->delete('/some-url')
-        ->withBody(json_encode(['id-to-delete' => 42]));
+        ->withJson(['id-to-delete' => 42]);
 });
 ```
 
