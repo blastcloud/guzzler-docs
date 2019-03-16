@@ -77,10 +77,16 @@ You can expect a certain body on a request by passing a `$body` string to the `w
 ```php
 $this->guzzler->expects($this->once())
     ->withBody("some body string");
-
-// Or, a json based request
-    ->withBody(json_encode($someJsonableStructure));
 ```
+
+### withJson()
+
+You can expect a certain `JSON` body on a request by passing an array of data to the `withJson()` method.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withJson(['first' => 'value', 'second' => 'another']);
+``` 
 
 ### withProtocol($protocol)
 
@@ -164,4 +170,26 @@ $this->guzzler->expects($this->once())
         'to' => 25,
         'from' => 15
     ], true);
+```
+
+### withFormField(string $key, $value)
+
+You can expect a specific form field, serialized in the body of a post. This method assumes your request is formatted according to `Content-Type`:`application/x-www-form-urlencoded` standards. However, be aware that the header is not added to the expectation.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withFormField('first-name', 'John')
+    ->withFormField('last-name', 'Snow');
+```
+
+### withForm(array $formFields)
+
+You can expect a specific set of form fields, serialized in the body of a post. This method assumes your request is formatted according to `Content-Type`:`application/x-www-form-urlencoded` standards. However, be aware that the header is not added to the expectation.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withForm([
+        'first-name' => 'John',
+        'last-name' => 'Snow'
+    ]);
 ```
