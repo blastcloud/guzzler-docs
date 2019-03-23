@@ -11,6 +11,25 @@ Assertions are also intended to be made after the call to your code under test w
 
 ## Available Methods
 
+<div class="toc">
+    <p>
+        <a href="#assertnohistory-message-null">assertNoHistory</a><br />
+        <a href="#asserthistorycount-int-count-message-null">assertHistoryCount</a><br />
+        <a href="#assertfirst-closure-expect-message-null">assertFirst</a><br />
+        <a href="#assertnotfirst-closure-expect-message-null">assertNotFirst</a><br />
+    </p>
+    <p>
+        <a href="#assertlast-closure-expect-message-null">assertLast</a><br />
+        <a href="#assertnotlast-closure-expect-message-null">assertNotLast</a><br />
+        <a href="#assertindexes-array-indexes-closure-expect-message-null">assertIndexes</a><br />
+    </p>
+    <p>
+        <a href="#assertnotindexes-array-indexes-closure-expect-message-null">assertNotIndexes</a><br />
+        <a href="#assertall-closure-expect-message-null">assertAll</a><br />
+        <a href="http://localhost:8080/assertions/#assertnone-closure-expect-message-null">assertNone</a><br />
+    </p>
+</div>
+
 ### assertNoHistory($message = null)
 
 To assert that your code did not make any requests at all, you can use the `assertNoHistory()` method, and pass an optional message argument.

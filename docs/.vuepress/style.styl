@@ -71,3 +71,25 @@ pre[class*="language-"]
 
 .token.comment, .token.block-comment, .token.prolog, .token.doctype, .token.cdata
   color #999
+
+/* Alerts
+------------------------------------------------*/
+.custom-block.tip {
+  border-color: #fc4009;
+  background-color: rgba(252, 141, 62, .1);
+}
+
+/* TOCs
+------------------------------------------------*/
+.toc {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  grid-gap: none;
+}
+
+  .header-anchor.hlink {
+    float: right;
+  }
+
+@require '~vuepress-tabs/dist/themes/default.styl'

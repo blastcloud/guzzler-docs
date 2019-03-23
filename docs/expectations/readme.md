@@ -7,7 +7,7 @@ title: Guzzler | Expectations
 
 Expectations are the main way for you to define what you want Guzzler to search for through your Guzzle client's history. They are used in two separate ways:
 
-- To define the number of times you expect a match to be made before your test your code.
+- To define the number of times you expect a match to be made before you test your code.
 - To assert what Guzzler should search for in your client's history after you test your code.
 
 ### expects(InvokedRecorder $times, $message = message)
@@ -25,6 +25,37 @@ public function testExample()
 
 ## Available Methods
 
+<div class="toc">
+    <p>
+        <a href="#asynchronous">asynchronous</a><br />
+        <a href="#endpoint-string-uri-string-verb-verb-string-uri">endpoint, verbs</a><br />
+        <a href="#synchronous">synchronous</a><br />
+        <a href="#withbody-string-body-bool-exclusive-false">withBody</a><br />
+        <a href="#withform-array-formfields-bool-exclusive-false">withForm</a><br />
+    </p>
+    <p>
+        <a href="#withformfield-string-key-value">withFormField</a><br />
+        <a href="#withheader-string-key-string-array-value">withHeader</a><br />
+        <a href="#withheaders-array-headers">withHeaders</a><br />
+        <a href="#withjson-array-json-bool-exclusive-false">withJson</a><br />
+    </p>
+    <p>
+        <a href="#withoption-string-name-string-value">withOption</a><br />
+        <a href="#withoptions-array-options">withOptions</a><br />
+        <a href="#withprotocol-protocol">withProtocol</a><br />
+        <a href="#withquery-array-query-exclusive-false">withQuery</a><br />
+    </p>
+</div>
+
+### asynchronous()
+
+This method can be used to specify that the request should have been made with an asynchronous call; for example, `$client->postAsync()` instead of `$client->post()`.
+
+```php
+$this->guzzler->expects($this->once())
+    ->asynchronous();
+```
+
 ### endpoint(string $uri, string $verb), {verb}(string $uri)
 
 To specify the endpoint and method used for an expectation, use the `endpoint()` method or any of the convenience endpoint verb methods.
@@ -39,6 +70,48 @@ The following convenience verb methods are available to shorten your code. `get`
 ```php
 $this->guzzler->expects($this->any())
     ->get("/a-url-for-getting");
+```
+
+### synchronous()
+
+This method can be used to specify that the request should have been made with a synchronous call; for example, `$client->get()` instead of `$client->getAsync()`.
+
+```php
+$this->guzzler->expects($this->once())
+    ->synchronous();
+```
+
+### withBody(string $body, bool $exclusive = false)
+
+You can expect a certain body on a request by passing a `$body` string to the `withBody()` method.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withBody("some body string");
+```
+
+### withForm(array $formFields, bool $exclusive = false)
+
+You can expect a specific set of form fields in the body of a post. As of `1.2.1`, this method works with both URL encoded and multipart forms. 
+
+```php
+$this->guzzler->expects($this->once())
+    ->withForm([
+        'first-name' => 'John',
+        'last-name' => 'Snow'
+    ]);
+```
+
+By default, this method simply checks that all specified fields and values exist in the request body, but more may exist. By passing a boolean `true` as the second argument, the method will instead make a strict comparison.
+
+### withFormField(string $key, $value)
+
+You can expect a specific form field in the body of a post. As of `1.2.1`, this method works with both URL encoded and multipart forms.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withFormField('first-name', 'John')
+    ->withFormField('last-name', 'Snow');
 ```
 
 ### withHeader(string $key, string|array $value)
@@ -70,32 +143,49 @@ $this->guzzler->expects($this->once())
     ]);
 ```
 
-### withBody(string $body)
+By default, this method only checks to see that the specified argument exists somewhere in the request body. To make an exclusive comparison so that the request body must match the argument exactly, a boolean `true` can be passed as the second argument.
 
-You can expect a certain body on a request by passing a `$body` string to the `withBody()` method.
-
-```php
-$this->guzzler->expects($this->once())
-    ->withBody("some body string");
-```
-
-### withJson()
+### withJson(array $json, bool $exclusive = false)
 
 You can expect a certain `JSON` body on a request by passing an array of data to the `withJson()` method.
 
 ```php
 $this->guzzler->expects($this->once())
     ->withJson(['first' => 'value', 'second' => 'another']);
-``` 
+```
+<br />
 
-### withProtocol($protocol)
+::: tip Be Aware
+This method tests that the passed array exists on the request by first recursively sorting all keys and values in both the request body and the `$json` argument and then making a string comparison.
+:::
 
-You can expect a certain HTTP protocol (1.0, 1.1, 2.0) using the `withProtocol()` method.
+This means the following scenarios occur:
 
 ```php
+// Request body
+[
+    'first' => [
+        'a value',
+        'another value'
+    ],
+    'second' => 'second value'
+]
+
+// This expectation will pass. Remember, the request body and the
+// argument are both recursively sorted before comparison.
 $this->guzzler->expects($this->once())
-    ->withProtocol(2.0);
+    ->withJson(['another value', 'a value']);
+
+// This expectation will fail
+$this->guzzler->expects($this->once())
+    ->withJson(['first' => ['another value']]);
+    
+// This expectation will pass
+$this->guzzler->expects($this->once())
+    ->withJson(['second' => 'second value']);
 ```
+
+By default, this method checks only that the passed array of values exists somewhere in the request body. To make an exclusive comparison so that only the data passed exists on the request body, a boolean `true` can be passed as the second argument.
 
 ### withOption(string $name, string $value)
 
@@ -126,22 +216,13 @@ $this->guzzler->expects($this->once())
     ]);
 ```
 
-### synchronous()
+### withProtocol($protocol)
 
-This method can be used to specify that the request should have been made with a synchronous call; for example, `$client->get()` instead of `$client->getAsync()`.
-
-```php
-$this->guzzler->expects($this->once())
-    ->synchronous();
-```
-
-### asynchronous()
-
-This method can be used to specify that the request should have been made with an asynchronous call; for example, `$client->postAsync()` instead of `$client->post()`.
+You can expect a certain HTTP protocol (1.0, 1.1, 2.0) using the `withProtocol()` method.
 
 ```php
 $this->guzzler->expects($this->once())
-    ->asynchronous();
+    ->withProtocol(2.0);
 ```
 
 ### withQuery(array $query, $exclusive = false)
@@ -170,26 +251,4 @@ $this->guzzler->expects($this->once())
         'to' => 25,
         'from' => 15
     ], true);
-```
-
-### withFormField(string $key, $value)
-
-You can expect a specific form field, serialized in the body of a post. This method assumes your request is formatted according to `Content-Type`:`application/x-www-form-urlencoded` standards. However, be aware that the header is not added to the expectation.
-
-```php
-$this->guzzler->expects($this->once())
-    ->withFormField('first-name', 'John')
-    ->withFormField('last-name', 'Snow');
-```
-
-### withForm(array $formFields)
-
-You can expect a specific set of form fields, serialized in the body of a post. This method assumes your request is formatted according to `Content-Type`:`application/x-www-form-urlencoded` standards. However, be aware that the header is not added to the expectation.
-
-```php
-$this->guzzler->expects($this->once())
-    ->withForm([
-        'first-name' => 'John',
-        'last-name' => 'Snow'
-    ]);
 ```
