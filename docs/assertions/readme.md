@@ -26,7 +26,7 @@ Assertions are also intended to be made after the call to your code under test w
     <p>
         <a href="#assertnotindexes-array-indexes-closure-expect-message-null">assertNotIndexes</a><br />
         <a href="#assertall-closure-expect-message-null">assertAll</a><br />
-        <a href="http://localhost:8080/assertions/#assertnone-closure-expect-message-null">assertNone</a><br />
+        <a href="#assertnone-closure-expect-message-null">assertNone</a><br />
     </p>
 </div>
 
