@@ -14,12 +14,13 @@ module.exports = {
                     ['mocking-responses/', 'Mocking Responses'],
                     ['expectations/', 'Expectations'],
                     ['assertions/', 'Assertions'],
-                    ['helpers/', 'Helpers']
+                    ['helpers/', 'Helpers'],
+                    ['extending/', 'Extending Guzzler']
                 ]
             },
             {
                 title: 'Miscellaneous',
-                collapsable: true,
+                collapsable: false,
                 children: [
                     ['changelog/', 'Changelog']
                 ]
@@ -31,9 +32,5 @@ module.exports = {
     ga: "UA-135533170-1",
     evergreen: true,
     markdown: {
-       /* config: md => {
-            const vuepressTabs = require('vuepress-tabs');
-            vuepressTabs(md)
-        }*/
     }
 };
