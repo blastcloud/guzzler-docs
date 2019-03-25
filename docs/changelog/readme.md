@@ -4,6 +4,14 @@ title: Guzzler | Changelog
 ---
 # Changelog
 
+## [Unreleased]
+- Currently in the process of writing a `WithFile` filter. As might be expected, there are lots of gotchas associated with file work. Hope to have this one out in another release some time in the next week or two. (Now being 2019-03-24)
+- I also plan to write and release a road map on the docs site outlining where I want to go with the next project, tentatively called `Drive`, that will work with Guzzler. The short description of it is, "Response factories based on Swagger, RAML, or API Blueprint docs".
+
+## [1.3.0] - 2019-03-24
+- Added `Exposition::addNamespace` method to allow users to write custom filters and override Guzzler provided filters.
+- Refactored `Exposition::__call` method to search through any user-provided namespaces for filters before using the defaults provided by Guzzler.
+
 ## [1.2.1] - Released 2019-03-23
 - Refactored filters into class based structure so that any number of filters can be added in the future.
 - Added `Disposition` class to parse multipart form post bodies.
