@@ -1,7 +1,6 @@
 module.exports = {
     themeConfig: {
         logo: '/img/guzzler-logo.svg',
-        updatePopup: true,
         nav: [
             { text: 'Home', link: '/'},
         ],
@@ -34,6 +33,7 @@ module.exports = {
     },
     ga: "UA-135533170-1",
     evergreen: true,
-    markdown: {
+    serviceWorker: {
+        updatePopup: true
     }
 };
