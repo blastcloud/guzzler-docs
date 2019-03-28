@@ -1,4 +1,8 @@
 module.exports = {
+    description: "The official documentation for the Guzzler testing framework.",
+    head: [
+        ['link', {rel:"manifest", href:"/manifest.json"}]
+    ],
     themeConfig: {
         logo: '/img/guzzler-logo.svg',
         nav: [
