@@ -1,7 +1,7 @@
 {
   "name": "Guzzler",
   "short_name": "Guzzler",
-  "start_url": "/expectations",
+  "start_url": "/getting-started",
   "display": "standalone",
   "lang": "en-US",
   "background_color:": "#f8f8f8",
