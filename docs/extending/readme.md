@@ -5,9 +5,9 @@ title: Guzzler | Extending Guzzler
 
 # Extending Guzzler
 
-Though Guzzler tries to be as helpful as possible, there may be times when you need to extend the provided capabilities for your own needs. The main way to do that is by creating your own reusable filters. As of release `1.3.0`, Guzzler allows you to create your own custom filters and even override the provided filters, if you wish. 
+Though Guzzler tries to be as helpful as possible, there may be times when you want to extend the provided capabilities for your own needs. The main way to do that is by creating your own reusable filters. As of release `1.3.0`, Guzzler allows you to create your own [custom filters](#custom-filters) and even override the provided filters, if you wish. 
 
-As of release `1.4.0`, you can create your own macros or override those provided by guzzler. Where filters allow you to make classes that handle low level elimination of history items, macros allow you to create convenience methods that map to normal expectation calls. `synchronous()`, `asynchronous()`, and each of the endpoint verb convenience methods like `get()` and `post()` are all macros.
+As of release `1.4.0`, you can create your own [macros](#custom-macros) or override those provided by guzzler. Where filters allow you to make classes that handle low level elimination of history items, macros allow you to create convenience methods that map to normal expectation calls. `synchronous`, `asynchronous`, `endpoint`, and each of the endpoint verb convenience methods like `get` and `post` are all macros.
 
 ## Custom Filters
 
@@ -91,7 +91,12 @@ The following naming convention is followed for filter classes.
 
 ### Adding a Namespace
 
-To use your filters in Guzzler, you must provide the namespace to look through to find your class. To do this, use the `Expectation::addNamespace` method. This can be done anywhere in your test before your test runs. Because it's done through a static method, it can also be done in a `setUpBeforeClass` method. Also, because this adds an entire namespace, it only needs to be done once to use all class filters you may have in that namespace.
+To use your filters in Guzzler, you must provide the namespace to look through to find your class. There are two ways to do this:
+
+1. Inline before it is needed with the static `Expectation::addNamespace` method.
+1. Globally with the PHPUnit extension that Guzzler provides.
+
+#### Adding a Namespace Inline
 
 ```php
 <?php
@@ -123,17 +128,42 @@ class SomethingTest extends TestCase
 Any namespaces you add to the `Expectation` class will be checked **before** the provided filters. So, if you name your filter the same as one provided by Guzzler, it will override the Guzzler default. This is exactly what you should do, if you want to override the provided filter.
 :::
 
+#### Adding a Namepsace Globally
+
+You can ensure your filters are available throughout all your tests by adding the Guzzler PHPUnit extension to your `phpunit.xml` file.
+
+```xml
+<phpunit>
+    <!-- ... any other configs -->
+    <extensions>
+        <extension class="BlastCloud\Guzzler\Helpers\Extension" />
+    </extensions>
+    <php>
+        <var name="GuzzlerFilterNamespace" value="tests\GuzzlerFilters" />
+    </php>
+</phpunit>
+```
+
+There are two parts to adding a namespace globally:
+
+1. The `BlastCloud\Guzzler\Helpers\Extension` extension must be added to an `extensions` object.
+1. A `php` object variable with the name `GuzzlerFilterNamespace`.
+
+::: tip Be Aware
+If you add a namespace via the extension, slashes should not be escaped.
+:::
+
 ## Custom Macros
 
-Macros allow you to create convenience methods like ,`synchronous()` or `post()`, that internally create `Expectation` conditions. For example, the following are the internal implementations of `synchronous()` and `asynchronous`.
+Macros allow you to create convenience methods like ,`synchronous` or `post`, that internally create `Expectation` conditions. For example, the following are the internal implementations of `synchronous` and `asynchronous`.
 
 ```php
-Expectation::macro(‘synchronous’, function (Expectation $e) {
+Expectation::macro(‘synchronous’, function (Expectation $e) {   
     return $e->withOption(‘synchronous’, true);
 });
 
 Expectation::macro(‘asynchronous’, function (Expectation $e) {
-    Return $e->withOption(‘synchronous’, null);
+    return $e->withOption(‘synchronous’, null);
 });
 ```
 
@@ -149,7 +179,7 @@ http://some-url.com/api/v2/customers?show=50&page=3
 http://some-url.com/api/v2/reports?page=2&show=75
 ```
 
-Rather than writing the same filters for each individual endpoint, you can write a short macro to make a shorthand for this scenario.
+Rather than writing the same filters for each individual endpoint, you can create a macro to make a shorthand for this scenario.
 
 ```php
 Expectation::macro(‘paginate’, function (Expectation $e, $url, $show, $page) {
@@ -172,4 +202,85 @@ $this->guzzler->expects($this->once())
 
 $this->guzzler->expects($this->once())
     ->paginate(‘/api/v2/reports’, 75, 2);
+```
+
+When creating a macro, the first argument should be the name of the method you'd like to add, followed by a closure that accepts an `Expectation` instance as the first argument, and any number of arguments you need following. You can even make arguments optional.
+
+```php
+Expectation::macro('someName', function ($expect, $argument = false) {
+    if ($argument) {
+        // Do something
+        return $expect;
+    }
+    
+    // Do something else
+    return $expect;
+});
+``` 
+
+### Registering Macros
+
+You can register macros in two ways:
+
+1. Inline anywhere before you need it with the static `Expectation::macro` method.
+1. Globally with the PHPUnit extension that Guzzler provides. 
+
+#### Registering Macros Inline
+
+You can register a macro anywhere you like before you need to use it, using `Expectation::macro`.
+
+```php
+Expense::macro('vendorSetup', function (Expectation $e, $token) {
+    return $e->asynchronous()
+        ->withOption('stream', true)
+        ->withHeader('Authorization', $token);
+});
+
+// You can then use the vendorSetup method as needed.
+$this->guzzler->expects($this->any())
+    ->vendorSetup($someAuthToken)
+    ->get('/some-endpoint');
+```
+
+#### Registering Macros Globally
+
+You can ensure your filters are available throughout all your tests by adding the Guzzler PHPUnit extension to your `phpunit.xml` file.
+
+```xml
+<phpunit>
+    <!-- ... any other configs -->
+    <extensions>
+        <extension class="BlastCloud\Guzzler\Helpers\Extension" />
+    </extensions>
+    <php>
+        <var name="GuzzlerMacroFile" value="tests/testFiles/macros.php" />
+    </php>
+</phpunit>
+```
+
+There are two parts to adding a namespace globally:
+
+1. The `BlastCloud\Guzzler\Helpers\Extension` extension must be added to an `extensions` object.
+1. A `php` object variable with the name `GuzzlerMacroFile`, pointing to your file that has all your macros.
+
+::: tip Be Aware
+If you add a file via the extension, slashes should not be escaped.
+:::
+
+An example macro file:
+
+```php
+<?php
+
+use BlastCloud\Guzzler\Expectation;
+
+Expense::macro('vendorSetup', function (Expectation $e, $token) {
+    return $e->asynchronous()
+        ->withOption('stream', true)
+        ->withHeader('Authorization', $token);
+});
+
+Expectation::macro('second', function (Expectation $e) {
+    // Do something 
+});
 ```
