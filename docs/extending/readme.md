@@ -29,7 +29,7 @@ Though these methods are called directly on the `Expectation` instance, they exi
 Our ideal filter API would be the following method where we can pass in an array of user IDs.
 
 ```php
-$expectation->post('/users')
+$expectation->post("/users")
     ->withUserIn([1, 6, 42]);
 ```
 
@@ -113,7 +113,7 @@ class SomethingTest extends TestCase
         parent::setUp();
         
         $this->client = $this->guzzler->getClient();
-        Expectation::addNamespace('tests\\GuzzlerFilters');
+        Expectation::addNamespace("tests\\GuzzlerFilters");
     }
     
     public function testSomething()
@@ -158,12 +158,12 @@ If you add a namespace via the extension, slashes should not be escaped.
 Macros allow you to create convenience methods like ,`synchronous` or `post`, that internally create `Expectation` conditions. For example, the following are the internal implementations of `synchronous` and `asynchronous`.
 
 ```php
-Expectation::macro(‘synchronous’, function (Expectation $e) {   
-    return $e->withOption(‘synchronous’, true);
+Expectation::macro("synchronous", function (Expectation $e) {   
+    return $e->withOption("synchronous", true);
 });
 
-Expectation::macro(‘asynchronous’, function (Expectation $e) {
-    return $e->withOption(‘synchronous’, null);
+Expectation::macro("asynchronous", function (Expectation $e) {
+    return $e->withOption("synchronous", null);
 });
 ```
 
@@ -182,11 +182,11 @@ http://some-url.com/api/v2/reports?page=2&show=75
 Rather than writing the same filters for each individual endpoint, you can create a macro to make a shorthand for this scenario.
 
 ```php
-Expectation::macro(‘paginate’, function (Expectation $e, $url, $show, $page) {
+Expectation::macro("paginate", function (Expectation $e, $url, $show, $page) {
     return $e->get($url)
         ->withQuery([
-            ‘show’ => $show,
-            ‘page’ => $page
+            "show" => $show,
+            "page" => $page
         ]);
 });
 ```
@@ -195,19 +195,19 @@ Now, you can use the `paginate` method on any `Expectation` instance, and it wil
 
 ```php
 $this->guzzler->expects($this->once())
-    ->paginate(‘/api/v2/customers’, 50, 3)
-    ->withOption(‘stream’, true’);
+    ->paginate("/api/v2/customers", 50, 3)
+    ->withOption("stream", true);
 
 // or
 
 $this->guzzler->expects($this->once())
-    ->paginate(‘/api/v2/reports’, 75, 2);
+    ->paginate("/api/v2/reports", 75, 2);
 ```
 
 When creating a macro, the first argument should be the name of the method you'd like to add, followed by a closure that accepts an `Expectation` instance as the first argument, and any number of arguments you need following. You can even make arguments optional.
 
 ```php
-Expectation::macro('someName', function ($expect, $argument = false) {
+Expectation::macro("someName", function ($expect, $argument = false) {
     if ($argument) {
         // Do something
         return $expect;
@@ -230,16 +230,16 @@ You can register macros in two ways:
 You can register a macro anywhere you like before you need to use it, using `Expectation::macro`.
 
 ```php
-Expense::macro('vendorSetup', function (Expectation $e, $token) {
+Expense::macro("vendorSetup", function (Expectation $e, $token) {
     return $e->asynchronous()
-        ->withOption('stream', true)
-        ->withHeader('Authorization', $token);
+        ->withOption("stream", true)
+        ->withHeader("Authorization", $token);
 });
 
 // You can then use the vendorSetup method as needed.
 $this->guzzler->expects($this->any())
     ->vendorSetup($someAuthToken)
-    ->get('/some-endpoint');
+    ->get("/some-endpoint");
 ```
 
 #### Registering Macros Globally
@@ -274,13 +274,13 @@ An example macro file:
 
 use BlastCloud\Guzzler\Expectation;
 
-Expense::macro('vendorSetup', function (Expectation $e, $token) {
+Expense::macro("vendorSetup", function (Expectation $e, $token) {
     return $e->asynchronous()
-        ->withOption('stream', true)
-        ->withHeader('Authorization', $token);
+        ->withOption("stream", true)
+        ->withHeader("Authorization", $token);
 });
 
-Expectation::macro('second', function (Expectation $e) {
+Expectation::macro("second", function (Expectation $e) {
     // Do something 
 });
 ```
