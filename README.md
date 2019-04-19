@@ -7,7 +7,7 @@ This project is built using [Vuepress](https://vuepress.vuejs.org/). The text fo
 If you'd like to build it locally, do the following:
 
 1. Clone the repo
-1. Install the dependencies via either Yarn or NPM. (Example: yarn install).
-1. Run the dev for hot-swapping. yarn docs:dev.
+1. Install the dependencies via either Yarn or NPM. (Example: `yarn install`).
+1. Run the dev for hot-swapping. `yarn docs:dev`.
 
-You can also fully build the results with yarn docs:build.
+You can also fully build the results with `yarn docs:build`.
