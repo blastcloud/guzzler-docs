@@ -90,6 +90,8 @@ $this->guzzler->expects($this->once())
     ->withBody("some body string");
 ```
 
+By default, this method simply checks that the specified body exists somewhere in the request body. By passing a boolean `true` as the second argument, the method will instead make a strict comparison.
+
 ### withForm(array $formFields, bool $exclusive = false)
 
 You can expect a specific set of form fields in the body of a post. As of `1.2.1`, this method works with both URL encoded and multipart forms. 
@@ -142,8 +144,6 @@ $this->guzzler->expects($this->once())
         "Accept" => "application/json"
     ]);
 ```
-
-By default, this method only checks to see that the specified argument exists somewhere in the request body. To make an exclusive comparison so that the request body must match the argument exactly, a boolean `true` can be passed as the second argument.
 
 ### withJson(array $json, bool $exclusive = false)
 

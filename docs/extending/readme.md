@@ -167,6 +167,10 @@ Expectation::macro("asynchronous", function (Expectation $e) {
 });
 ```
 
+::: tip Be Aware
+If you create a macro with the same name as one provided by Guzzler, your implementation will override the default. That is exactly what you should do, if overriding is your goal.
+:::
+
 ### Use Case
 
 Sometimes you may find yourself using the same set of `Expectation` filters over and over. For example, imagine you are using an API from which you can paginate the results it returns for several GET endpoints. In the following example, you can tell the service for each endpoint how many results you want returned for each page, and what page (or multiple of the number to show) of results.
