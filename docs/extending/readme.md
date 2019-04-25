@@ -66,7 +66,7 @@ class WithUser extends Base Implements With
         // A STR_PAD constant is provided so that error messages
         // can be formatted similarly across filters.
         return str_pad("User ID:", self::STR_PAD)
-            .json_encode($this->userIds);
+            .json_encode($this->userIds, JSON_PRETTY_PRINT);
     }
 }
 ```
