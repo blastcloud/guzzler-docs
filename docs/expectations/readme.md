@@ -141,12 +141,12 @@ $file = new File($contents = null, string $filename = null, string $contentType 
 $file = File::create([
     'filename' => 'avatar.jpg',
     'contentType' => 'image/jpeg',
-    'contents' => fopen('/path/to/file.jpg')
+    'contents' => fopen('/path/to/file.jpg', 'r')
 ]);
 
 // Set each attribute individually.
 $file = new File();
-$file->contents = __DIR__ . '/path/to/file.jpg';
+$file->contents = fopen(__DIR__ . '/path/to/file.jpg', 'r');
 $file->filename = 'avatar.jpg';
 
 $this->guzzler->expects($this->once())
