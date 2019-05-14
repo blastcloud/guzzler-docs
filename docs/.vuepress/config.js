@@ -13,7 +13,7 @@ module.exports = {
         logo: '/img/guzzler-logo.svg',
         nav: [
             { text: 'Home', link: '/'},
-            { text: 'Why', link: '/why'}
+            { text: 'Why', link: '/why/'}
         ],
         sidebar: [
             {
@@ -32,7 +32,7 @@ module.exports = {
                 title: 'Miscellaneous',
                 collapsable: false,
                 children: [
-                    ['why/', 'Why This Library'],
+                    ['why/', 'Why'],
                     ['changelog/', 'Changelog']
                 ]
             }
