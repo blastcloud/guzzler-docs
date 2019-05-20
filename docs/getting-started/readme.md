@@ -37,8 +37,8 @@ The `getClient` method returns a new instance of the Guzzle `Client` class and a
 
 ```php
 $client = $this->guzzler->getClient([
-    "stream" => true,
-    "base_uri" => "http://some-url.com/api/v2"
+    "base_uri" => "http://some-url.com/api/v2",
+    // ... Any other configurations
 ]);
 ```
 
