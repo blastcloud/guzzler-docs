@@ -10,7 +10,7 @@ Expectations are the main way for you to define what you want Guzzler to search 
 - To define the number of times you expect a match to be made before you test your code.
 - To assert what Guzzler should search for in your client's history after you test your code.
 
-### expects(InvokedRecorder $times, $message = message)
+### expects(InvokedRecorder $times, $message = null)
 
 To mimic the chainable syntax of PHPUnit mock objects, you can create expectations with the `expects()` method and PHPUnit’s own **InvokedRecorders**. These are methods like `$this->once()`, `$this->lessThan($int)`, `$this->never()`, and so on. You may also pass an optional message to be used on errors as the second argument.
 
@@ -31,7 +31,7 @@ public function testExample()
         <a href="#endpoint-string-uri-string-verb-verb-string-uri">endpoint, verbs</a><br />
         <a href="#synchronous">synchronous</a><br />
         <a href="#withbody-string-body-bool-exclusive-false">withBody</a><br />
-        <a href="#withcallback-closure-callback">withCallback</a><br />
+        <a href="#withcallback-closure-callback-string-message-null">withCallback</a><br />
         <a href="#withfile-string-fieldname-file-file">withFile</a><br />
     </p>
     <p>
@@ -95,7 +95,7 @@ $this->guzzler->expects($this->once())
 
 By default, this method simply checks that the specified body exists somewhere in the request body. By passing a boolean `true` as the second argument, the method will instead make a strict comparison.
 
-### withCallback(Closure $callback)
+### withCallback(Closure $callback, string $message = null)
 
 You can pass a custom, anonymous method to do ad hoc, on-the-fly, determining if a history item fits your conditions. Your closure should expect a Guzzle history array, and return `true` or `false` on whether or not the history item passes your test. A Guzzle history item is an array with the following structure:
 
@@ -115,6 +115,10 @@ $this->guzzler->expects($this->once())
         return isset($history['options']['cookies']);
     });
 ```
+
+::: tip
+By default, the error message for a callback is simply "Custom callback: \Closure". It's recommended you pass your own message as the second argument to make a more descriptive error about what exactly your closure was testing.
+:::
 
 ### withFile(string $fieldName, File $file)
 

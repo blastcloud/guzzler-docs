@@ -6,7 +6,7 @@ module.exports = {
         ['meta', {name: 'twitter:site', content: '@AKWebDev'}],
         ['meta', {name: 'twitter:title', content: 'Supercharge your app or SDK'}],
         ['meta', {name: 'twitter:description', content: 'Supercharge your app or SDK with a testing framework for Guzzle'}],
-        ['meta', {name: 'twitter:image', content: 'https://guzzler.dev/img/Guzzler-logo.png'}],
+        ['meta', {name: 'twitter:image', content: 'https://guzzler.dev/img/500x500-full.png'}],
         ['meta', {name: 'twitter:image:alt', content: 'The Guzzler logo'}]
     ],
     themeConfig: {
@@ -25,7 +25,8 @@ module.exports = {
                     ['expectations/', 'Expectations'],
                     ['assertions/', 'Assertions'],
                     ['helpers/', 'Helpers'],
-                    ['extending/', 'Extending Guzzler']
+                    ['extending/', 'Extending Guzzler'],
+                    ['troubleshooting/', 'Troubleshooting']
                 ]
             },
             {
