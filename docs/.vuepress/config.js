@@ -35,6 +35,7 @@ module.exports = {
                 collapsable: false,
                 children: [
                     ['why/', 'Why'],
+                    ['examples/', 'Examples'],
                     ['changelog/', 'Changelog']
                 ]
             }
