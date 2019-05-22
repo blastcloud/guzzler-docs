@@ -236,7 +236,6 @@ You can register a macro anywhere you like before you need to use it, using `Exp
 ```php
 Expense::macro("vendorSetup", function (Expectation $e, $token) {
     return $e->asynchronous()
-        ->withOption("stream", true)
         ->withHeader("Authorization", $token);
 });
 
@@ -280,7 +279,6 @@ use BlastCloud\Guzzler\Expectation;
 
 Expense::macro("vendorSetup", function (Expectation $e, $token) {
     return $e->asynchronous()
-        ->withOption("stream", true)
         ->withHeader("Authorization", $token);
 });
 
