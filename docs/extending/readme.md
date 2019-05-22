@@ -277,7 +277,7 @@ An example macro file:
 
 use BlastCloud\Guzzler\Expectation;
 
-Expense::macro("vendorSetup", function (Expectation $e, $token) {
+Expectation::macro("vendorSetup", function (Expectation $e, $token) {
     return $e->asynchronous()
         ->withHeader("Authorization", $token);
 });
