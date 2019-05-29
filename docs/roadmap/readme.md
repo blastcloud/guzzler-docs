@@ -8,12 +8,35 @@ title: Roadmap | Guzzler
 - [ ] Thank you all for the Github stars and downloads. It’s been extremely gradifying to see that something I built, trying to solve my own problem has been not only liked but used by other developers around the world.
 - [ ] Wanted to share my plans and hopes for the future of Guzzler. I would love feedback on the idea and parts. You can do that on the Github issues I’ll create and add links to this article.
 
-## Phase 1: Cleanup / Refactoring
+## Phase 1: Examples / Tutorials
 
-- [ ] There are a few things I want to fix about the codebase. It’s not bad, but there are several things I can see being problems in the future; particularly the current implementation of the `Expectation` class and all `with*` statements. Everything works as expected (pun semi-intended) right now, but all of them exist on one class. Each should become their own class. In hindsight it also makes sense to move each `with*` method to be in the same class as it’s associated filter. That way, the filter implementation also isn’t reliant upon a string convention (‘filterBy’).
-- [ ] All this to say, I plan to refactor to split things up in a way so that an infinite amount of `with*` helpers can be created in the future for any real purpose that may arise.
-- [ ] I also want to create a miniature driver system for parsing a request’s body for working with JSON and both `form-encoded` and `multitype` posts. Currently, the implementation of `withForm` and `withFormField` expect the request to only be form encoded, and there is no support for expecting files. This means, once I have a few things moved to where they should be, you can expect `withForm` and `withFormField` to work with either a form type, and you can expect a `withFile` and `withFiles` methods to drop sometime soon too.
-- [ ] Expected completion: 1 week or less
+One thing I didn't really expect after creating this library was hearing people say they would like to see how I would go about using Guzzle in real(istic) projects. Though it makes sense in retrospect, it was still kind of a surprise, as I don't consider myself t really be that experienced using Guzzle in lots of contexts. However, after watching the likes of Adam Wathan and others over the years who intentionally set out learning something in order to teach it to others, I'm up to the challenge and hope to have something soon.
+
+Currently, I have a page of "Examples" that is in the process of building. However, after completing a couple, I immediately see that examples of only the Guzzler / Test side are not really that helpful on their own. Instead, I'm going to create a new repo that is exclusively examples using different patterns and real services. The following are the intended examples and topics:
+
+- GET service. Based off the current example for Google Maps Static image.
+  - Should include option for multiple markers of different styles
+  - Should include otpion for streetview
+  - Should include reason for making a "service", as it really is just a bunch of getters
+  - Should include async by default and only include `wait()` as optional implementation detail
+  - Mention that it can be mixed with the multi-part file POST to S3 or Flysystem is desired
+- POST data to Stripe.
+  - Try going with a repository pattern to illustrate that it makes sense to think of some services that involve multiple verbs as CRUD models
+  - Because most of the functionality of the repository is similar or even shared, build each out of an abstract or base class
+  - Really build out the error handling with this one because there are so many different errors or validation issues that can occur
+- Service based push
+  - The idea here is to set off some kind of process handled by a third-party, and we don't expect an immediate answer
+  - Examples could be:
+    - SMS: Nexmo
+    - Email: SendGrid
+    - Log: Rollbar
+- Error Handling
+  - This one deserves an explanation separate from everything else, but the error handling itself should be built into the other examples
+  - Give multiple options for how errors should be handled
+    - Events
+    - Introspection
+    - Logging
+- Consider naming the project `Driver's Ed`
 
 ## Phase 2: Drive
 
@@ -45,10 +68,19 @@ title: Roadmap | Guzzler
 <?php
 
 use BlastCloud\Guzzler\UsesGuzzler;
-use Guzzlehttp\Guzzle\Client;
 use BlastCloud\Drive\Drive as drive;  // function
 
 class SomeTest extends TestCase {
+
+    public $faker;
+    public $client;
+
+    public function setUp(): void
+    {
+        $this->faker = Faker\Factory::create();
+
+        $this->client = $this->guzzler->getClient();
+    }
 
     public function testSomething() {
         // This example builds all fields based on Spec and fills with Faker data.
@@ -60,10 +92,28 @@ class SomeTest extends TestCase {
         // filled with Faker.
         $this->guzzler->queueResponse(
             drive(‘custom.endpoint.status’)
-                ->json(‘’)
-                ->file(‘something’)
-                ->cookies([])
-                ->headers([])
+                ->json([
+                    'data' => drive('custom.model', [
+                        'age' => 42,
+                        'registered' => true,
+                        // Other fields are auto-filled with Faker
+                        // based on the spec document
+                    ])->make(3), // Here we specify we want to generate 3 objects in the 'data' field
+
+                    // HATEOS could also be supported, if they are specified in the spec doc
+                    'links' => [
+                        // 'first' => 1, inherent first
+                        'last' => 6,
+                        'next' => 3,
+                        'previous' => 1
+                    ]
+                ])
+                ->cookies([
+                    'vendor-cookie' => faker()->text(24)
+                ])
+                ->headers([
+                    'Content-Type' => 'application/json'
+                ])
         );
 
         // Under the hood, build an expectation based on the specification, on fields
@@ -74,7 +124,11 @@ class SomeTest extends TestCase {
 }
 ```
 
-## Checkpoints
+## Road Test
 
 - [ ] Finally, I imagine a code coverage like report for endpoint usage for an API. Ideally, a developer can specify what endpoints they want to cover from the defined specifications, and this report would listen for “drives”, or generated responses, for the specified endpoints. It would keep track of which ones are used and which are not, and generate an HTML report of which endpoints were not used but were supposed to be.
+- [ ] The idea here is very much inspired by PHPUnit's HTML coverage report.
 - [ ] By default, every response type in the spec should be handled at some point in the test suite.
+- [ ] I'd also like to create a coverage report spec that is meant to be used by other languages too in the same way that the JUnit spec or clover specs are generic XML coverage specs.
+  - [ ] Endpoints / status codes covered are only included if the test it was injected into passes
+  - [ ] Only a handful of failure status codes are "recommended" for every endpoint, and those are the same ones currently outlined in the "examples" page of the documentation
