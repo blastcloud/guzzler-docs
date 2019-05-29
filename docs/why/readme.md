@@ -18,28 +18,28 @@ public function test_add_bill_if_it_doesnt_exist()
         new Response(404, [], '{}'),
         new Response(201, [], file_get_contents(__DIR__.'/quickbook-stubs/bill-created.json')),
     ]);
-    
+
     $history = [];
-    $historyMock = Middleware::history($history);    
+    $historyMock = Middleware::history($history);
     $handler = HandlerStack::create($mock);
     $handler->push($historyMock);
-    
+
     $client = new Client(['handler' => $handler]);
     $accessToken = '123ABC';
     $companyId = 'XYZ987';
-    
+
     $instance = new Quickbooks($client, $accessToken, $companyId);
     $bill = new Bill('some-bill-id', 'some-other-mock-data');
-    
+
     $qbBill = $instance->getOrCreateBill($bill);
     $this->assertInstanceOf(QBBill::class, $qbBill);
-    
+
     // Now we make sure we did what was expected based on Quickbook's API Docs.
-    
+
     // First Call
     $this->assertEquals('GET', $history[0]['request']->getMethod());
     $this->assertEquals("/v3/company/{$this->companyId}/bill/{$bill->quickbooks_id}", $history[0]['request']->getUri()->getPath());
-    
+
     // Second Call
     $this->assertEquals('POST', $history[1]['request']->getMethod());
     $this->assertEquals("/v3/company/{$this->companyId}/bill", $history[1]['request']->getUri()->getPath());
@@ -51,7 +51,7 @@ public function test_add_bill_if_it_doesnt_exist()
     $this->assertEquals(200, $line['Amount']);
     $this->assertArrayHasKey("Id", $line);
     $this->assertEquals($bill->id, $line['Id']);
-    
+
     // Auths
     foreach ($history as $hist) {
         $this->assertContains("Bearer {$accessToken}", $hist['request']->getHeader('authorization'), "Not all requests were authorized.");
@@ -83,10 +83,10 @@ Given the code shown above, we can now shorten our tests to be more descriptive 
 public function setUp(): void
 {
     parent::setUp();
-    
+
     $this->instance = new Quickbooks(
-        $this->guzzler->getClient(), 
-        $this->accessToken, 
+        $this->guzzler->getClient(),
+        $this->accessToken,
         $this->companyId
     );
 }
@@ -95,30 +95,30 @@ public function test_add_bill_if_it_doesnt_exist()
 {
     $bill = new Bill('some-bill-id', 'some-other-mock-data');
 
-    // Here we explicitely say we care about the times it's called, the 
-    // endpoint and method, and then what response we expect back in 
+    // Here we explicitely say we care about the times it's called, the
+    // endpoint and method, and then what response we expect back in
     // this scenario.
     $this->guzzler->expects($this->once())
         ->get("/v3/company/{$this->companyId}/bill/{$bill->quickbooks_id}")
         ->willRespond(new Response(404, [], "{}");
-    
+
     // Here we explicitely care about POSTing the specified JSON data and
-    // we are mocking the return data with the body we copied to a 
+    // we are mocking the return data with the body we copied to a
     // local file from the Quickbooks docs.
     $this->guzzler->expects($this->once())
         ->post("/v3/company/{$this->companyId}/bill")
         ->withJson([
-            "DetailType" => "AccountBasedExpenseLineDetail", 
-            "Amount" => 200.0, 
+            "DetailType" => "AccountBasedExpenseLineDetail",
+            "Amount" => 200.0,
             "Id" => $bill->id
         ])
         ->willRespond(new Response(201, [], file_get_contents(__DIR__.'/quickbook-stubs/bill-created.json')));
-    
+
     // Our code under test actually runs.
     $qbBill = $this->instance->getOrCreateBill($bill);
     $this->assertInstanceOf(QBBill::class, $qbBill);
-    
-    // Here we explicitely check that all requests were properly 
+
+    // Here we explicitely check that all requests were properly
     // authenticated, no matter how many requests we made.
     $this->guzzler->assertAll(function (Expectation $e) {
         return $e->withHeaders([
