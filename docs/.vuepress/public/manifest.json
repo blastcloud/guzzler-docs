@@ -1,0 +1,22 @@
+{
+  "name": "Guzzler",
+  "short_name": "Guzzler",
+  "start_url": "/getting-started",
+  "display": "standalone",
+  "lang": "en-US",
+  "background_color:": "#f8f8f8",
+  "theme_color": "#f8f8f8",
+  "description": "Super charge your unit tests with a full testing library made specifically for Guzzle.",
+  "icons": [
+    {
+      "src": "img/192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

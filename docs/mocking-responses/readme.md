@@ -35,7 +35,9 @@ $this->guzzler->queueResponse(new Response(200));
 $this->guzzler->queueResponse(new \InvalidArgumentException(“message”));
 ```
 
-> Be aware that whatever order you queue your responses is the order they will be returned from your client, no matter the URI or method of the request. This is a constraint of Guzzle’s mock handler.
+::: tip Be Aware
+Whatever order you queue your responses is the order they will be returned from your client, no matter the URI or method of the request. This is a constraint of Guzzle’s mock handler.
+:::
 
 ### queueMany($response, int $times = 1)
 
@@ -69,4 +71,6 @@ $this->guzzler->expects($this->exactly(2))
     ->will(new Response(210));
 ```
 
-> Be aware that whatever order you queue your responses is the order they will be returned from your client, no matter the URI or method of the request. This is a constraint of Guzzle’s mock handler.
+::: tip Be Aware
+Whatever order you queue your responses is the order they will be returned from your client, no matter the URI or method of the request. This is a constraint of Guzzle’s mock handler.
+:::
