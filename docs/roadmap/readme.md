@@ -1,3 +1,8 @@
+---
+lang: en-US
+title: Roadmap | Guzzler
+---
+
 # Roadmap
 
 - [ ] Thank you all for the Github stars and downloads. It’s been extremely gradifying to see that something I built, trying to solve my own problem has been not only liked but used by other developers around the world.
@@ -20,19 +25,19 @@
 ```json
 // drive.json
 {
-	“first-vendor”: {
-		“url”: “http://some-url/api.swagger”,
-		“type”: “swagger”,
-		“version”: 3
-	},
-	“second: {
-		“file”: “/path/to/file”,
-		“type”: “RAML
-	},
-	“custom”: {
-		“file”: “/path/to/file”,
-		“type”: “custom”
- 	}
+    “first-vendor”: {
+        "url”: “http://some-url/api.swagger”,
+        “type”: “swagger”,
+        “version”: 3
+    },
+    “second: {
+        “file”: “/path/to/file”,
+        “type”: “RAML
+    },
+    “custom”: {
+        “file”: “/path/to/file”,
+        “type”: “custom”
+    }
 }
 ```
 
@@ -45,27 +50,27 @@ use BlastCloud\Drive\Drive as drive;  // function
 
 class SomeTest extends TestCase {
 
-	public function testSomething() {
-		// This example builds all fields based on Spec and fills with Faker data.
-		$this->guzzler->queueResponse(
-			drive(‘vendor.endpoint-name.status-code’)
-		);
+    public function testSomething() {
+        // This example builds all fields based on Spec and fills with Faker data.
+        $this->guzzler->queueResponse(
+            drive(‘vendor.endpoint-name.status-code’)
+        );
 
-		// This example, you can override any random data that would normally be
-		// filled with Faker.
-		$this->guzzler->queueResponse(
-			drive(‘custom.endpoint.status’)
-				->json(‘’)
-				->file(‘something’)
-				->cookies([])
-				->headers([])
-		);
+        // This example, you can override any random data that would normally be
+        // filled with Faker.
+        $this->guzzler->queueResponse(
+            drive(‘custom.endpoint.status’)
+                ->json(‘’)
+                ->file(‘something’)
+                ->cookies([])
+                ->headers([])
+        );
 
-		// Under the hood, build an expectation based on the specification, on fields
-		// that are marked as required.
-		$this->guzzler->expects($this->once())
-			->validate(‘custom.endpoint.verb’);
-	}
+        // Under the hood, build an expectation based on the specification, on fields
+        // that are marked as required.
+        $this->guzzler->expects($this->once())
+            ->validate(‘custom.endpoint.verb’);
+    }
 }
 ```
 

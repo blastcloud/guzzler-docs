@@ -1,6 +1,6 @@
 ---
 lang: en-US
-title: Guzzler | Troubleshooting
+title: Troubleshooting | Guzzler
 ---
 
 # Troubleshooting

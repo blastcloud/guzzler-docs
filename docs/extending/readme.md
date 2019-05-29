@@ -1,6 +1,6 @@
 ---
 lang: en-US
-title: Guzzler | Extending Guzzler
+title: Extending | Guzzler
 ---
 
 # Extending Guzzler

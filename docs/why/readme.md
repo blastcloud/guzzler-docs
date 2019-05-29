@@ -1,6 +1,6 @@
 ---
 lang: en-US
-title: Guzzler | Why
+title: Why | Guzzler
 ---
 
 # Why This Library?

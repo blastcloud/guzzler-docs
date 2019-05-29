@@ -1,6 +1,6 @@
 ---
 lang: en-US
-title: Guzzler | Examples
+title: Examples | Guzzler
 ---
 
 # Examples

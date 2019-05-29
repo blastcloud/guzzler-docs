@@ -1,6 +1,6 @@
 ---
 lang: en-US
-title: Guzzler | Getting Started
+title: Getting Started | Guzzler
 ---
 
 # Getting Started

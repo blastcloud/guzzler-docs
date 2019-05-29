@@ -1,6 +1,6 @@
 ---
 lang: en-US
-title: Guzzler | Expectations
+title: Expectations | Guzzler
 ---
 
 # Expectations

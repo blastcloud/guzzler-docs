@@ -1,6 +1,6 @@
 ---
 lang: en-US
-title: Guzzler | Mocking Responses
+title: Mocking Responses | Guzzler
 ---
 
 # Mocking Responses
