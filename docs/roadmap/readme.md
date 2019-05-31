@@ -5,20 +5,23 @@ title: Roadmap | Guzzler
 
 # Roadmap
 
-- [ ] Thank you all for the Github stars and downloads. It’s been extremely gradifying to see that something I built, trying to solve my own problem has been not only liked but used by other developers around the world.
-- [ ] Wanted to share my plans and hopes for the future of Guzzler. I would love feedback on the idea and parts. You can do that on the Github issues I’ll create and add links to this article.
+> This page outlines where I hope to take the Guzzler project and build out a bit of an ecosystem surrounding the founding ideas of expressive, and helpful integration testing.
+
+First off, thank you all for the Github stars and downloads. It’s been extremely gratifying to see that something I built, trying to solve my own problem has been not only liked but used by other developers around the world, and continues to grow each day.
+
+Second, the following is a rough idea of what I hope to build and include in projects adjacent to Guzzler. Everything listed below is planned, but not set in stone. Furthermore, I would love feedback on either parts of the plan you like, or areas that it could be improved. There will be Github issues created for different points of the plan below and links will be included. If you like the idea, please leave a thumbs up on the issue(s), or if there is something you think could work better, please leave a comment.
 
 ## Phase 1: Examples / Tutorials
 
-One thing I didn't really expect after creating this library was hearing people say they would like to see how I would go about using Guzzle in real(istic) projects. Though it makes sense in retrospect, it was still kind of a surprise, as I don't consider myself t really be that experienced using Guzzle in lots of contexts. However, after watching the likes of Adam Wathan and others over the years who intentionally set out learning something in order to teach it to others, I'm up to the challenge and hope to have something soon.
+One thing I didn't really expect was hearing people say they would like to see how I would go about using Guzzle in real(istic) projects. Though it makes sense in retrospect it was still surprising, as I don't consider myself to really be that experienced using Guzzle in lots of contexts. However, after watching the likes of Adam Wathan and others over the years who intentionally set out learning something in order to teach it to others, I'm up to the challenge and hope to have something soon.
 
 Currently, I have a page of "Examples" that is in the process of building. However, after completing a couple, I immediately see that examples of only the Guzzler / Test side are not really that helpful on their own. Instead, I'm going to create a new repo that is exclusively examples using different patterns and real services. The following are the intended examples and topics:
 
 - GET service. Based off the current example for Google Maps Static image.
   - Should include option for multiple markers of different styles
-  - Should include otpion for streetview
+  - Should include option for streetview
   - Should include reason for making a "service", as it really is just a bunch of getters
-  - Should include async by default and only include `wait()` as optional implementation detail
+  - Should include async by default and only include `wait()` as optional implementation detail. Mention that Guzzle works the same way under the hood.
   - Mention that it can be mixed with the multi-part file POST to S3 or Flysystem is desired
 - POST data to Stripe.
   - Try going with a repository pattern to illustrate that it makes sense to think of some services that involve multiple verbs as CRUD models
@@ -30,6 +33,7 @@ Currently, I have a page of "Examples" that is in the process of building. Howev
     - SMS: Nexmo
     - Email: SendGrid
     - Log: Rollbar
+    - Notification: Slack
 - Error Handling
   - This one deserves an explanation separate from everything else, but the error handling itself should be built into the other examples
   - Give multiple options for how errors should be handled
@@ -40,24 +44,27 @@ Currently, I have a page of "Examples" that is in the process of building. Howev
 
 ## Phase 2: Drive
 
-- [ ] Originally, I thought it would be nice to build out an Expectation driver for requests from a codebase to an API. That’s what lead to Guzzler. I’m happy with the majority of it, but seeing it now, I’m not a fan of how it still requires a developer to verify what their requests should look like to contact an API and also completely define what the response should be from the service. I’d actually prefer an API build the responses Guzzler should queue.
-- [ ] With the open specifications like Swagger, RAML, and API Blueprint, there’s no reason why developers should have to build out their own response objects. Instead, I envision a factory syntax similar to Laravel’s model factories for use in tests. Rather than creating an ORM model, it would create a Response object with the fields, body, headers, and status code specified in a vendor’s Spec document. For example, a Swagger doc may contain the possible responses for a `/customers/{id}` endpoint: a `200`, a `201`, and a `404`. A developer, using (tenitively named) Drive can specify the spec doc, the endpoint name, and the response type.
+Originally, I thought it would be nice to build out an Expectation driver for requests from a codebase to an API. That’s what lead to Guzzler. I’m happy with the majority of it, but seeing it now, I’m not a fan of how it still requires a developer to verify what their requests should look like to contact an API and also completely define what the response should be from the service. I’d actually prefer a generator build the responses Guzzler should queue.
+
+With the open specifications like Swagger/OpenAPI, RAML, and API Blueprint, there’s no reason why developers should have to build out their own response objects. Instead, I envision a factory syntax similar to Laravel’s model factories for use in tests. Rather than creating an ORM model, it would create a Response object with the fields, body, headers, and status code specified in a vendor’s Spec document. For example, a Swagger doc may contain the possible responses for a `/customers/{id}` endpoint: a `200`, a `201`, and a `404`. A developer, using (tenitively named) `Drive` can specify the spec doc, the endpoint name, and the response type.
 
 ### Example
+
+The following `.json` file could be placed in the codebase in a testing directory or other. There may be more configurations to come, but at this point this is what would be needed.
 
 ```json
 // drive.json
 {
-    “first-vendor”: {
+    “vendor”: {
         "url”: “http://some-url/api.swagger”,
         “type”: “swagger”,
         “version”: 3
     },
-    “second: {
+    “second-vendor”: {
         “file”: “/path/to/file”,
         “type”: “RAML
     },
-    “custom”: {
+    “custom-vendor”: {
         “file”: “/path/to/file”,
         “type”: “custom”
     }
@@ -126,7 +133,10 @@ class SomeTest extends TestCase {
 
 ## Road Test
 
-- [ ] Finally, I imagine a code coverage like report for endpoint usage for an API. Ideally, a developer can specify what endpoints they want to cover from the defined specifications, and this report would listen for “drives”, or generated responses, for the specified endpoints. It would keep track of which ones are used and which are not, and generate an HTML report of which endpoints were not used but were supposed to be.
+Finally, I imagine a code coverage report for endpoint usage on an API. Ideally, a developer can specify what endpoints they want to cover from the defined specifications, and this report would listen for “drives”, or generated responses, for the specified endpoints. It would keep track of which ones are used and which are not, and generate an HTML report of which endpoints were not used but were supposed to be.
+
+This idea is inspired very heavily by PHPUnit’s HTML coverage report. And I think
+
 - [ ] The idea here is very much inspired by PHPUnit's HTML coverage report.
 - [ ] By default, every response type in the spec should be handled at some point in the test suite.
 - [ ] I'd also like to create a coverage report spec that is meant to be used by other languages too in the same way that the JUnit spec or clover specs are generic XML coverage specs.
