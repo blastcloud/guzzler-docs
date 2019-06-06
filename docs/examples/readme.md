@@ -30,13 +30,13 @@ If we want to test our usage of an API that is primarily GET calls with URL para
 1. The API key is included in the URL query
 1. The correct URL param configs and address are included in the URL
 
-If everything is correct, final URL to call would be
+If everything is correct, the final URL to called would be:
 
 ```bash
 http://maps.googleapis.com/maps/api/staticmap?size={width in pixels}x{height in pixels}&scale=2&maptype=roadmap&sensor=false&markers=color:{color}|label:{letter}|{url encoded address}&key={api key}
 ```
 
-And the result would be an image like this
+And the result would be an image like this:
 
 <figure>
     <img src="/img/frost-building.png" alt="Google Maps Example Image" title="Google Maps Example Image" />
@@ -250,15 +250,13 @@ Again, this is ideal for a few reasons. First, we can now pass as many `withMark
 
 ## Async: Google Street View
 
-If you have the scenario where you'd like to download several images from a remote service, like [Google Maps Street View](https://developers.google.com/maps/documentation/streetview/intro), you might test your asynchronous work with the following
-
-If everything is correct, the URL for each request should be
+If you have the scenario where you'd like to download several images from a remote service, like [Google Maps Street View](https://developers.google.com/maps/documentation/streetview/intro), you might test your work is made asynchronously with the following URL for each request.
 
 ```bash
 https://maps.googleapis.com/maps/api/streetview?size={width}x{height}&sensor=false&location={url encoded address}&key={api key}
 ```
 
-And the result would be an image like this
+And the result would be an image like this:
 
 <figure>
     <img src="/img/streetview.jpeg" alt="Streetview Example" title="Streetview Example" />
