@@ -84,18 +84,16 @@ public function testStaticMapUsage()
 }
 ```
 
-The query parameters are pretty self-explanatory, but the markers portion of the query actually has a specialized syntax - using a pipe delimited key-value syntax - for it's own configuration. In that case, it would probably be easiest to drop in a closure to do specialized checking on whether or not a history item matches the marker configs we are wanting.
-
-Normally, you would probably also want to dynamically load different values like the size, marker color, label, and scale from configuration; either on the framework level or wherever makes sense for your situation.
+The query parameters are pretty self-explanatory, but the markers portion of the query actually has a specialized configuration, using a pipe delimited key-value syntax. In that case, it would probably be easiest to drop in a closure to do specialized checking on whether or not a history item matches the marker configs we are wanting.
 
 ### We Can Do Better
 
 Though the above code is perfectly fine, it might still be a good idea to abstract some further details so that our tests can allow more flexibility and not need changing if we update our marker configuration. Assuming we are using some kind of framework or other mechanism to pull our config values from a file, we might have our Google Maps configurations like the following:
 
 ```php
-// In a google config file
+// In a google.php config file
 return [
-    'key' => env('google-api-key', 'abc123'),
+    'key' => env('google-maps-key', 'abc123'),
     'map' => [
         'size' => "325x200",
         'scale' => 2,
@@ -119,9 +117,9 @@ return [
 
 Now, we can just pass the entire 'map' array from our configs directly into the `withQuery` method in our test, AND know that if the configuration changes, our test still stays current.
 
+### Before
+
 ```php
-// Before
-// -----------------------
 ->withQuery([
     'size' => "{$this->width}x{$this->height}",
     'scale' => 2,   // or whatever scale your app should use
@@ -129,9 +127,11 @@ Now, we can just pass the entire 'map' array from our configs directly into the 
     'sensor' => false,
     'key' => $this->apiKey
 ])
+```
 
-// After
-// -----------------------
+### After
+
+```php
 ->withQuery( config('google.map') + ['key' => config('google.key')] )
 // ...or whatever the syntax would be for your configuration system.
 ```
@@ -215,7 +215,6 @@ Now, we can cleanly write our tests anywhere in our test suite and pass in any n
 ### Before
 
 ```php
-// -----------------------
 ->withCallback(function ($history) use ($address) {
     parse_str($history['request']->getUri()->getQuery(), $query);
 
