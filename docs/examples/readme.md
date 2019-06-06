@@ -88,6 +88,167 @@ The query parameters are pretty self-explanatory, but the markers portion of the
 
 Normally, you would probably also want to dynamically load different values like the size, marker color, label, and scale from configuration; either on the framework level or wherever makes sense for your situation.
 
+### We Can Do Better
+
+Though the above code is perfectly fine, it might still be a good idea to abstract some further details so that our tests can allow more flexibility and not need changing if we update our marker configuration. Assuming we are using some kind of framework or other mechanism to pull our config values from a file, we might have our Google Maps configurations like the following:
+
+```php
+// In a google config file
+return [
+    'key' => env('google-api-key', 'abc123'),
+    'map' => [
+        'size' => "325x200",
+        'scale' => 2,
+        'maptype' => 'roadmap',
+        'sensor' => false
+    ],
+    'markers' => [
+        'colors' => [
+            'blue',
+            'green',
+            'red'
+        ],
+        'labels' => [
+            'A',
+            'B',
+            'C'
+        ]
+    ]
+];
+```
+
+Now, we can just pass the entire 'map' array from our configs directly into the `withQuery` method in our test, AND know that if the configuration changes, our test still stays current.
+
+```php
+// Before
+// -----------------------
+->withQuery([
+    'size' => "{$this->width}x{$this->height}",
+    'scale' => 2,   // or whatever scale your app should use
+    'maptype' => 'roadmap',
+    'sensor' => false,
+    'key' => $this->apiKey
+])
+
+// After
+// -----------------------
+->withQuery( config('google.map') + ['key' => config('google.key')] )
+// ...or whatever the syntax would be for your configuration system.
+```
+
+In a lot of ways, this is actually preferable because we're testing the behavior that our production code should use whatever the current configuration is, and not necessarily that it's using any specific configuration item.
+
+We might also decide there are a few other ways we want to test our markers. The Google maps API actually allows us to repeat the `markers` argument as many times as we want and give a different label and color for each one. Because of that, it might be useful to create a filter that can be used throughout our tests for our application or library. So, we might take the logic used in our `withCallback` and expand it into the following class:
+
+```php
+// In our test suite
+use BlastCloud\Guzzler\Filters\Base;
+use BlastCloud\Guzzler\Interfaces\With;
+
+class WithMarker extends Base implements With
+{
+    protected $markers = [];
+
+    public function withMarker($configs)
+    {
+        $this->markers[] = $configs;
+    }
+
+    public function __invoke(array $history): array
+    {
+        return array_filter($history, function ($item) {
+            $markers = $this->splitMarkers($item['request']->getUri()->getQuery());
+
+            $finds = array_filter($this->markers, function ($marker) use ($markers) {
+                return $this->inMarkerList($marker, $markers);
+            });
+
+            return count($finds) == count($this->markers);
+        });
+    }
+
+    /**
+     * Because using parse_str will eliminate any duplicates for the "markers" URL
+     * query, we must resort to splitting with "explode" instead.
+     *
+     * Example: &markers=color:blue|label:A|123+4th+St&markers=color:green|label:B|567+8th+St&key=abcde
+     * Would Become: [
+     *   'markers=color:blue|label:A|123+4th+St',
+     *   'markers=color:green|label:B|567+8th+St'
+     * ]
+     */
+    protected function splitMarkers($url)
+    {
+        return array_filter(explode('&', $url), function($item) {
+            return substr($item, 0, 7) == 'markers';
+        });
+    }
+
+    protected function inMarkerList($point, $list)
+    {
+        foreach ($list as $item) {
+            if ( strpos($item, 'color:'.$point['color']) !== false
+                && strpos($item, 'label:'.$point['label']) !== false
+                && strpos($item, urlencode($point['address'])) !== false
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function __toString(): string
+    {
+        return str_pad("Markers:", self::STR_PAD)
+            .json_encode($this->markers, JSON_PRETTY_PRINT);
+    }
+}
+```
+
+::: tip Note
+Please see the [Extending Guzzler](/extending/#custom-filters) section for full details on using custom filters.
+:::
+
+Now, we can cleanly write our tests anywhere in our test suite and pass in any number of markers using our new filter.
+
+### Before
+
+```php
+// -----------------------
+->withCallback(function ($history) use ($address) {
+    parse_str($history['request']->getUri()->getQuery(), $query);
+
+    $marker = explode('|', $query['markers']);
+
+    return in_array('color:'.$this->markerColor, $marker)
+        && in_array('label:'.$this->markerLabel, $marker)
+        && in_array(urlencode($address), $marker);
+}, 'Failed to format the marker correctly.');
+```
+
+### After
+
+```php
+$colors = config('google.markers.colors');
+$labels = config('google.markers.label');
+
+$expect = $this->guzzler->expects($this->once())
+    // ...
+
+for ($i = 0; $i < count($addresses); $i++) {
+    $expect->withMarker([
+        'color' => $colors[$i],
+        'label' => $labels[$i],
+        'address' => $addresses[$i]
+    ]);
+}
+
+// ...
+```
+
+Again, this is ideal for a few reasons. First, we can now pass as many `withMarker()` calls as we like to the `Expectation`. Second, we are using a dynamic way to pair colors and labels for our markers. And lastly, we are now abstracting away the logic for Google's specialized syntax into a single place that can be updated if the API ever changes, without changing our tests.
+
 ## Async: Google Street View
 
 If you have the scenario where you'd like to download several images from a remote service, like [Google Maps Street View](https://developers.google.com/maps/documentation/streetview/intro), you might test your asynchronous work with the following
