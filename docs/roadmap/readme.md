@@ -46,6 +46,8 @@ Currently, I have a page of "Examples" that is slowly growing. However, after co
 
 ## Phase 2: Drive
 
+[Github Issue Here](https://github.com/blastcloud/guzzler/issues/7)
+
 Originally, I thought it would be nice to build out an Expectation driver for requests from a codebase to an API. That’s what lead to Guzzler. I’m happy with the majority of it, but seeing it now, I’m not a fan of how it still requires a developer to verify what their requests should look like to contact an API and also completely define what the response should be from the service. I’d actually prefer a generator build the responses Guzzler should queue.
 
 With the open specifications like Swagger/OpenAPI, RAML, and API Blueprint, there’s no reason why developers should have to build out their own response objects. Instead, I envision a factory syntax similar to Laravel’s model factories for use in tests. Rather than creating an ORM model, it would create a Response object with the fields, body, headers, and status code specified in a vendor’s Spec document. For example, a Swagger doc may contain the possible responses for a `/customers/{id}` endpoint: a `200`, a `201`, and a `404`. A developer, using `Drive` can specify the spec doc, the endpoint name, and the response type.
@@ -80,7 +82,7 @@ The following `.json` file could be placed in the codebase in a testing director
 <?php
 
 use BlastCloud\Guzzler\UsesGuzzler;
-use BlastCloud\Drive\Drive as drive;  // function
+use BlastCloud\Drive\Drive;  // function
 
 class SomeTest extends TestCase {
     use UsesGuzzler;
@@ -98,13 +100,13 @@ class SomeTest extends TestCase {
     public function testSomething() {
         // This example builds all fields based on Spec and fills with Faker data.
         $this->guzzler->queueResponse(
-            drive(‘vendor.endpoint-name.status-code’)
+            drive('vendor.endpoint-name.verb', 'status-code')
         );
 
         // Here you can override any random data that would normally be
         // filled with Faker.
         $this->guzzler->queueResponse(
-            drive(‘vendor.endpoint.status’)
+            drive('vendor.endpoint.status')
                 ->json([
                     'data' => drive('vendor.model', [
                         'age' => 42,
@@ -133,7 +135,7 @@ class SomeTest extends TestCase {
         // Under the hood, build an expectation based on the specification, on fields
         // that are marked as required.
         $this->guzzler->expects($this->once())
-            ->validate(‘vendor.endpoint.verb’);
+            ->validate('vendor.endpoint.verb');
     }
 }
 ```
@@ -143,6 +145,8 @@ Just to clarify what is being shown above, both the `validate()` method and the 
 The real benefit of auto-generating data according to spec is that we are then "contract testing", meaning we are testing based on the "promise" offered to us by the external service owner. That way, we can both dynamically use realistic responses, but we are also following the mantra "Don't mock what you don't own" and replacing it with "Mock what you are guaranteed in a contract".
 
 ## Phase 3: Road Test
+
+[Github Issue Here](https://github.com/blastcloud/guzzler/issues/8)
 
 Finally, I'd like to build out an automated way to prove our code is handling all important interactions with a service we care to support. This would be most like a code coverage report for endpoint usage on an API. Ideally, a developer can specify what endpoints they want to cover from the defined specifications, and this report would listen for "drives” - generated responses - for the specified endpoints. It would keep track of which ones are used and which are not, and generate an HTML report of which endpoints were not used but were supposed to be.
 
