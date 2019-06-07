@@ -5,17 +5,17 @@ title: Roadmap | Guzzler
 
 # Roadmap
 
-> This page outlines where I hope to take the Guzzler project and build out a bit of an ecosystem surrounding the founding ideas of expressive, and helpful integration testing.
+> This page outlines where I hope to take the Guzzler project and build out a bit of an ecosystem surrounding the founding ideas of expressive, and helpful contract / integration testing.
 
-First off, thank you all for the Github stars and downloads. It’s been extremely gratifying to see that something I built, trying to solve my own problem has been not only liked but used by other developers around the world, and continues to grow each day.
+First off, thank you all for the Github stars and downloads. It’s been extremely gratifying to see that something I built - trying to solve my own problem - has been not only liked but used by other developers around the world, and continues to grow each day.
 
 Second, the following is a rough idea of what I hope to build and include in projects adjacent to Guzzler. Everything listed below is planned, but not set in stone. Furthermore, I would love feedback on either parts of the plan you like, or areas that it could be improved. There will be Github issues created for different points of the plan below and links will be included. If you like the idea, please leave a thumbs up on the issue(s), or if there is something you think could work better, please leave a comment.
 
 ## Phase 1: Examples / Tutorials
 
-One thing I didn't really expect was hearing people say they would like to see how I would go about using Guzzle in real(istic) projects. Though it makes sense in retrospect it was still surprising, as I don't consider myself to really be that experienced using Guzzle in lots of contexts. However, after watching the likes of Adam Wathan and others over the years who intentionally set out learning something in order to teach it to others, I'm up to the challenge and hope to have something soon.
+One thing I really didn't expect was hearing people say they would like to see how I would go about using Guzzle in real(istic) projects. Though it makes sense in retrospect it was still surprising, as I don't consider myself to be that experienced using Guzzle in lots of contexts. However, after watching the likes of Adam Wathan and others over the years who intentionally set out learning something in order to teach it to others, I'm up to the challenge and hope to have something started soon.
 
-Currently, I have a page of "Examples" that is in the process of building. However, after completing a couple, I immediately see that examples of only the Guzzler / Test side are not really that helpful on their own. Instead, I'm going to create a new repo that is exclusively examples using different patterns and real services. The following are the intended examples and topics:
+Currently, I have a page of "Examples" that is slowly growing. However, after completing a couple, I immediately see that examples of only the Guzzler / Test side are not really that helpful on their own. Instead, I'm going to create a new repo that is exclusively examples using different patterns and real services. The following are the intended examples and topics:
 
 - GET service. Based off the current example for Google Maps Static image.
   - Should include option for multiple markers of different styles
@@ -46,30 +46,33 @@ Currently, I have a page of "Examples" that is in the process of building. Howev
 
 Originally, I thought it would be nice to build out an Expectation driver for requests from a codebase to an API. That’s what lead to Guzzler. I’m happy with the majority of it, but seeing it now, I’m not a fan of how it still requires a developer to verify what their requests should look like to contact an API and also completely define what the response should be from the service. I’d actually prefer a generator build the responses Guzzler should queue.
 
-With the open specifications like Swagger/OpenAPI, RAML, and API Blueprint, there’s no reason why developers should have to build out their own response objects. Instead, I envision a factory syntax similar to Laravel’s model factories for use in tests. Rather than creating an ORM model, it would create a Response object with the fields, body, headers, and status code specified in a vendor’s Spec document. For example, a Swagger doc may contain the possible responses for a `/customers/{id}` endpoint: a `200`, a `201`, and a `404`. A developer, using (tenitively named) `Drive` can specify the spec doc, the endpoint name, and the response type.
+With the open specifications like Swagger/OpenAPI, RAML, and API Blueprint, there’s no reason why developers should have to build out their own response objects. Instead, I envision a factory syntax similar to Laravel’s model factories for use in tests. Rather than creating an ORM model, it would create a Response object with the fields, body, headers, and status code specified in a vendor’s Spec document. For example, a Swagger doc may contain the possible responses for a `/customers/{id}` endpoint: a `200`, a `201`, and a `404`. A developer, using `Drive` can specify the spec doc, the endpoint name, and the response type.
 
 ### Example
 
-The following `.json` file could be placed in the codebase in a testing directory or other. There may be more configurations to come, but at this point this is what would be needed.
+The following `.json` file could be placed in the codebase in a testing directory or wherever would make sense. There may be more configurations to come, but at this point this is what would be needed.
+
+### drive.json
 
 ```json
-// drive.json
 {
-    “vendor”: {
-        "url”: “http://some-url/api.swagger”,
-        “type”: “swagger”,
-        “version”: 3
+    "vendor-name": {
+        "url": "http://some-url/api.swagger",
+        "type": "swagger",
+        "version": 3
     },
-    “second-vendor”: {
-        “file”: “/path/to/file”,
-        “type”: “RAML
+    "second-vendor": {
+        "file": "/path/to/file",
+        "type": "RAML"
     },
-    “custom-vendor”: {
-        “file”: “/path/to/file”,
-        “type”: “custom”
+    "custom-vendor": {
+        "file": "/path/to/file",
+        "type": "custom"
     }
 }
 ```
+
+### Example Usage
 
 ```php
 <?php
@@ -78,6 +81,7 @@ use BlastCloud\Guzzler\UsesGuzzler;
 use BlastCloud\Drive\Drive as drive;  // function
 
 class SomeTest extends TestCase {
+    use UsesGuzzler;
 
     public $faker;
     public $client;
@@ -95,7 +99,7 @@ class SomeTest extends TestCase {
             drive(‘vendor.endpoint-name.status-code’)
         );
 
-        // This example, you can override any random data that would normally be
+        // Here you can override any random data that would normally be
         // filled with Faker.
         $this->guzzler->queueResponse(
             drive(‘custom.endpoint.status’)
@@ -116,29 +120,34 @@ class SomeTest extends TestCase {
                     ]
                 ])
                 ->cookies([
-                    'vendor-cookie' => faker()->text(24)
+                    'vendor-cookie' => $this->faker->text(24)
                 ])
                 ->headers([
                     'Content-Type' => 'application/json'
+                    // Any other headers specified in the spec doc are auto-generated
                 ])
         );
 
         // Under the hood, build an expectation based on the specification, on fields
         // that are marked as required.
         $this->guzzler->expects($this->once())
-            ->validate(‘custom.endpoint.verb’);
+            ->validate(‘vendor.endpoint.verb’);
     }
 }
 ```
 
+Just to clarify what is being shown above, both the `validate()` method and the `drive()` function both take the name of the vendor specified in the `drive.json` file, then the specific endpoint in question, followed by the verb or status code that should be either expected or returned.
+
+The real benefit of auto-generating data according to spec is that we are then "contract testing", meaning we are testing based on the "promise" offered to us by the external service owner. That way, we can both dynamically use realistic responses, but we are also following the mantra "Don't mock what you don't own" and replacing it with "Mock what you are guaranteed in a contract".
+
 ## Road Test
 
-Finally, I imagine a code coverage report for endpoint usage on an API. Ideally, a developer can specify what endpoints they want to cover from the defined specifications, and this report would listen for “drives”, or generated responses, for the specified endpoints. It would keep track of which ones are used and which are not, and generate an HTML report of which endpoints were not used but were supposed to be.
+Finally, I'd like to build out an automated way to prove our code is handling all important interactions with a service we care to support. This would be most like a code coverage report for endpoint usage on an API. Ideally, a developer can specify what endpoints they want to cover from the defined specifications, and this report would listen for "drives” - generated responses - for the specified endpoints. It would keep track of which ones are used and which are not, and generate an HTML report of which endpoints were not used but were supposed to be.
 
-This idea is inspired very heavily by PHPUnit’s HTML coverage report. And I think
+This idea is inspired very heavily by PHPUnit’s HTML coverage report. And I think a similar "coverage" rating based on those responses handled by a successful test could be extremely helpful for mission critical systems.
 
-- [ ] The idea here is very much inspired by PHPUnit's HTML coverage report.
-- [ ] By default, every response type in the spec should be handled at some point in the test suite.
-- [ ] I'd also like to create a coverage report spec that is meant to be used by other languages too in the same way that the JUnit spec or clover specs are generic XML coverage specs.
-  - [ ] Endpoints / status codes covered are only included if the test it was injected into passes
-  - [ ] Only a handful of failure status codes are "recommended" for every endpoint, and those are the same ones currently outlined in the "examples" page of the documentation
+The following are "wants" for `Road Test`:
+- By default, every response type in the spec should be handled at some point in the test suite, but additional data in the `drive.json` file can specify what endpoints the report should require for any given API.
+- Create a coverage report spec that is meant to be used by other languages and environments in the same way that the JUnit spec or clover specs are generic XML coverage specs. This includes:
+  - Endpoints / status codes covered are only included if the response was injected into passing tests (green)
+  - Only a handful of failure status codes are "recommended" for every endpoint, but more can be added via the `drive.json` or just simply used in a test. The default responses are outlined in the [examples](/examples/#testing-failure-scenarios) page of the documentation as minimum required.
