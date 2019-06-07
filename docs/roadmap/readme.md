@@ -44,6 +44,8 @@ Currently, I have a page of "Examples" that is slowly growing. However, after co
     - Logging
 - Consider naming the project `Driver's Ed`
 
+If there is anything specific about using Guzzle or Guzzler you'd appreciate an example or tutorial on, please [create an issue](https://github.com/blastcloud/guzzler/issues) on the project. Any feedback helps.
+
 ## Phase 2: Drive
 
 [Github Issue Here](https://github.com/blastcloud/guzzler/issues/7)
