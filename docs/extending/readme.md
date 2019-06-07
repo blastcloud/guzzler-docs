@@ -5,9 +5,7 @@ title: Extending | Guzzler
 
 # Extending Guzzler
 
-Though Guzzler tries to be as helpful as possible, there may be times when you want to extend the provided capabilities for your own needs. The main way to do that is by creating your own reusable filters. As of release `1.3.0`, Guzzler allows you to create your own [custom filters](#custom-filters) and even override the provided filters, if you wish. 
-
-As of release `1.4.0`, you can create your own [macros](#custom-macros) or override those provided by guzzler. Where filters allow you to make classes that handle low level elimination of history items, macros allow you to create convenience methods that map to normal expectation calls. `synchronous`, `asynchronous`, `endpoint`, and each of the endpoint verb convenience methods like `get` and `post` are all macros.
+Though Guzzler tries to be as helpful as possible, there may be times when you want to extend the provided capabilities for your own needs. You can do so with custom [filters](#custom-filters) and [macros](#custom-macros). 
 
 ## Custom Filters
 
@@ -24,7 +22,7 @@ $this->guzzler->assertAll(function ($e) use ($argument, $another) {
 
 ### Class Overview
 
-Though these methods are called directly on the `Expectation` instance, they exist as separate classes that extend the `Base` filter class and implement the `With` interface. For our example, let's imagine we are working with a web API where we send user information. However, we want to ensure that only specific user's information is sent in a request.
+Though these methods are called directly on an `Expectation` instance, they exist as separate classes that extend the `Base` filter class and implement the `With` interface. For our example, let's imagine we are working with a web API where we send user information. However, we want to ensure that the request contains only the information of specific users.
 
 Our ideal filter API would be the following method where we can pass in an array of user IDs.
 
@@ -52,7 +50,7 @@ class WithUser extends Base Implements With
         $this->userIds = $userIds;
     }
     
-    public function __invoke(array $history)
+    public function __invoke(array $history): array
     {
         return array_filter($history, function ($item) {
             $body = json_decode($item['request']->getBody(), true);
@@ -61,7 +59,7 @@ class WithUser extends Base Implements With
         });
     }
     
-    public function __toString()
+    public function __toString(): string
     {
         // A STR_PAD constant is provided so that error messages
         // can be formatted similarly across filters.
@@ -75,8 +73,8 @@ Every filter requires the following methods:
 
 | Method | What it does |
 |------|--------------|
-| __invoke() | Return all history items that pass the filter. |
-| __toString() | Return a human readable explanation. Used on failure. |
+| __invoke(): array | Return all history items that pass the filter. |
+| __toString(): string | Return a human readable explanation. Used on failure. |
 
 In addition, you should provide any methods you want to expose to the `Expectation` class, in the case above, the `withUserIn` method. You can provide as many public methods as you like. For example, you could add another method `withUserRoleAddsDirects` to force the filter to also require a list of employees if the user's role is `admin`. Just be aware that all exposed methods should be considered in the single `__invoke` method.
 
@@ -85,7 +83,6 @@ In addition, you should provide any methods you want to expose to the `Expectati
 The following naming convention is followed for filter classes. 
 
 - All classes should be named `With` followed by one word. Notice that the `W` is capitalized. For example, `WithBody`, `WithUser`, or `WithQuery`.
-- Your class can end either with or without as `s` and it will still be found. For example, `WithUser` or `WithUsers` will both be found.
 - Each of the exposed methods on your class should follow the naming convention `with` followed by a camel-cased method name, and the first portion should match the class name. For example, `withUserIds`, `withUserRole`, or `withUserStatus`.
 - Each exposed method can have as many arguments as you need, and they may be type hinted, if you prefer.
 
