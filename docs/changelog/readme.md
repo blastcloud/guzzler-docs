@@ -4,10 +4,6 @@ title: Changelog | Guzzler
 ---
 # Changelog
 
-## [Unreleased]
-
-- I plan to write and release a road map document on the docs site outlining where I want to go with the next project, tentatively called `Drive`, that will work with Guzzler. The short description of it is, "Response factories based on Swagger, RAML, or API Blueprint docs".
-
 ## [1.5.1] - Released 2019-05-20
 
 - Added the ability to add a custom error message for `withCallback`.

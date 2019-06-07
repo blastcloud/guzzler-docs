@@ -5,7 +5,9 @@ title: Roadmap | Guzzler
 
 # Roadmap
 
-> This page outlines where I hope to take the Guzzler project and build out a bit of an ecosystem surrounding the founding ideas of expressive, and helpful contract / integration testing.
+> The future's so bright, I gotta wear shades.
+>
+> ~ Timbuk 3
 
 First off, thank you all for the Github stars and downloads. It’s been extremely gratifying to see that something I built - trying to solve my own problem - has been not only liked but used by other developers around the world, and continues to grow each day.
 
@@ -102,9 +104,9 @@ class SomeTest extends TestCase {
         // Here you can override any random data that would normally be
         // filled with Faker.
         $this->guzzler->queueResponse(
-            drive(‘custom.endpoint.status’)
+            drive(‘vendor.endpoint.status’)
                 ->json([
-                    'data' => drive('custom.model', [
+                    'data' => drive('vendor.model', [
                         'age' => 42,
                         'registered' => true,
                         // Other fields are auto-filled with Faker
@@ -140,14 +142,19 @@ Just to clarify what is being shown above, both the `validate()` method and the 
 
 The real benefit of auto-generating data according to spec is that we are then "contract testing", meaning we are testing based on the "promise" offered to us by the external service owner. That way, we can both dynamically use realistic responses, but we are also following the mantra "Don't mock what you don't own" and replacing it with "Mock what you are guaranteed in a contract".
 
-## Road Test
+## Phase 3: Road Test
 
 Finally, I'd like to build out an automated way to prove our code is handling all important interactions with a service we care to support. This would be most like a code coverage report for endpoint usage on an API. Ideally, a developer can specify what endpoints they want to cover from the defined specifications, and this report would listen for "drives” - generated responses - for the specified endpoints. It would keep track of which ones are used and which are not, and generate an HTML report of which endpoints were not used but were supposed to be.
 
 This idea is inspired very heavily by PHPUnit’s HTML coverage report. And I think a similar "coverage" rating based on those responses handled by a successful test could be extremely helpful for mission critical systems.
 
+<figure>
+    <img src="/img/coverage.png" alt="Coverage Report Example" title="Coverage Report Example" />
+    <figcaption>Example Code Coverage Report</figcaption>
+</figure>
+
 The following are "wants" for `Road Test`:
-- By default, every response type in the spec should be handled at some point in the test suite, but additional data in the `drive.json` file can specify what endpoints the report should require for any given API.
+- By default, every response type in the spec should be handled at some point in the test suite, but additional data in the `drive.json` file can narrow what endpoints the report should require for any given API.
 - Create a coverage report spec that is meant to be used by other languages and environments in the same way that the JUnit spec or clover specs are generic XML coverage specs. This includes:
   - Endpoints / status codes covered are only included if the response was injected into passing tests (green)
   - Only a handful of failure status codes are "recommended" for every endpoint, but more can be added via the `drive.json` or just simply used in a test. The default responses are outlined in the [examples](/examples/#testing-failure-scenarios) page of the documentation as minimum required.

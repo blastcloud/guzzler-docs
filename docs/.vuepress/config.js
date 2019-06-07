@@ -36,6 +36,7 @@ module.exports = {
                 children: [
                     ['why/', 'Why'],
                     ['examples/', 'Examples'],
+                    ['roadmap/', 'Road Map'],
                     ['changelog/', 'Changelog']
                 ]
             }
