@@ -84,7 +84,7 @@ The following `.json` file could be placed in the codebase in a testing director
 <?php
 
 use BlastCloud\Guzzler\UsesGuzzler;
-use BlastCloud\Drive\Drive;  // function
+use function BlastCloud\Drive\drive;
 
 class SomeTest extends TestCase {
     use UsesGuzzler;
