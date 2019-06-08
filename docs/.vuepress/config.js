@@ -8,7 +8,8 @@ module.exports = {
         ['meta', {name: 'twitter:description', content: 'Supercharge your app or SDK with a testing framework for Guzzle'}],
         ['meta', {name: 'og:image', content: 'https://guzzler.dev/img/Guzzler-logo.png'}],
         ['meta', {name: 'twitter:image', content: 'https://guzzler.dev/img/500x500-full.png'}],
-        ['meta', {name: 'twitter:image:alt', content: 'The Guzzler logo'}]
+        ['meta', {name: 'twitter:image:alt', content: 'The Guzzler logo'}],
+        ['link', {rel: 'apple-touch-icon', sizes: '500x500' href:'https://guzzler.dev/img/500x500.png'}]
     ],
     themeConfig: {
         logo: '/img/guzzler-logo.svg',
