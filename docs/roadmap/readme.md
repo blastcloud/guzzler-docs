@@ -5,10 +5,6 @@ title: Roadmap | Guzzler
 
 # Roadmap
 
-> The future's so bright, I gotta wear shades.
->
-> ~ Timbuk 3
-
 First off, thank you all for the Github stars and downloads. It’s been extremely gratifying to see that something I built - trying to solve my own problem - has been not only liked but used by other developers around the world, and continues to grow each day.
 
 Second, the following is a rough idea of what I hope to build and include in projects adjacent to Guzzler. Everything listed below is planned, but not set in stone. Furthermore, I would love feedback on either parts of the plan you like, or areas that it could be improved. There will be Github issues created for different points of the plan below and links will be included. If you like the idea, please leave a thumbs up on the issue(s), or if there is something you think could work better, please leave a comment.
