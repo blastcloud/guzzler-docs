@@ -4,6 +4,15 @@ title: Changelog | Guzzler
 ---
 # Changelog
 
+## [1.5.2] - 2019-06-10
+- Fixed the deprecated/removed `ObjectInvocation` in PHPUnit 8.2 and above installations.
+    - Thanks `@llstarscreamll` for reporting the bug.
+
+## [Documentation ] Road Map - 2019-06-06
+- Published the official road map for the future of the project.
+- Created associated Github issues for user feedback.
+    - Thanks `@jdreesen` for fixing incorrect syntax in the `Drive` proposal.
+
 ## [1.5.1] - Released 2019-05-20
 
 - Added the ability to add a custom error message for `withCallback`.
@@ -45,6 +54,7 @@ title: Changelog | Guzzler
 
 - Added the new `withFormField` and `withForm` methods to the `Expectations` class.
 - Added the new `withJson` method to the `Expectations` class.
+    - Thanks `@satoved` for the idea and request.
 
 ## [1.1.0] - Released 2019-03-03
 
