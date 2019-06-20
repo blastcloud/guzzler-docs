@@ -231,7 +231,7 @@ You can register macros in two ways:
 You can register a macro anywhere you like before you need to use it, using `Expectation::macro`.
 
 ```php
-Expense::macro("vendorSetup", function (Expectation $e, $token) {
+Expectation::macro("vendorSetup", function (Expectation $e, $token) {
     return $e->asynchronous()
         ->withHeader("Authorization", $token);
 });

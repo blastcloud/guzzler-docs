@@ -26,11 +26,11 @@ If we want to test our usage of an API that is primarily GET calls with URL para
 
 #### Concerns
 
-1. The current base API URL is called
+1. The correct base API URL is called
 1. The API key is included in the URL query
 1. The correct URL param configs and address are included in the URL
 
-If everything is correct, the final URL to called would be:
+If everything is correct, the final URL to be called would be:
 
 ```bash
 http://maps.googleapis.com/maps/api/staticmap?size={width in pixels}x{height in pixels}&scale=2&maptype=roadmap&sensor=false&markers=color:{color}|label:{letter}|{url encoded address}&key={api key}

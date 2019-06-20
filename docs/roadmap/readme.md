@@ -20,7 +20,7 @@ Currently, I have a page of "Examples" that is slowly growing. However, after co
   - Should include option for streetview
   - Should include reason for making a "service", as it really is just a bunch of getters
   - Should include async by default and only include `wait()` as optional implementation detail. Mention that Guzzle works the same way under the hood.
-  - Mention that it can be mixed with the multi-part file POST to S3 or Flysystem is desired
+  - Mention that it can be mixed with the multi-part file POST to S3 or Flysystem if desired
 - POST data to Stripe.
   - Try going with a repository pattern to illustrate that it makes sense to think of some services that involve multiple verbs as CRUD models
   - Because most of the functionality of the repository is similar or even shared, build each out of an abstract or base class
@@ -46,9 +46,9 @@ If there is anything specific about using Guzzle or Guzzler you'd appreciate an 
 
 [Github Issue Here](https://github.com/blastcloud/guzzler/issues/7)
 
-Originally, I thought it would be nice to build out an Expectation driver for requests from a codebase to an API. That’s what lead to Guzzler. I’m happy with the majority of it, but seeing it now, I’m not a fan of how it still requires a developer to verify what their requests should look like to contact an API and also completely define what the response should be from the service. I’d actually prefer a generator build the responses Guzzler should queue.
+Originally, I thought it would be nice to build out an expectation driver for requests from a codebase to an API. That’s what lead to Guzzler. I’m happy with the majority of it, but seeing it now, I’m not a fan of how it still requires a developer to verify what their requests should look like to contact an API and also define what the response should be from the service. I’d actually prefer a generator build the responses Guzzler should queue.
 
-With the open specifications like Swagger/OpenAPI, RAML, and API Blueprint, there’s no reason why developers should have to build out their own response objects. Instead, I envision a factory syntax similar to Laravel’s model factories for use in tests. Rather than creating an ORM model, it would create a Response object with the fields, body, headers, and status code specified in a vendor’s Spec document. For example, a Swagger doc may contain the possible responses for a `/customers/{id}` endpoint: a `200`, a `201`, and a `404`. A developer, using `Drive` can specify the spec doc, the endpoint name, and the response type.
+With open specifications like Swagger/OpenAPI, RAML, and API Blueprint, there’s no reason why developers should have to build out their own response objects. Instead, I envision a factory syntax similar to Laravel’s model factories for use in tests. Rather than creating an ORM model, it would create a Response object with the fields, body, headers, and status code specified in a vendor’s Spec document. For example, a Swagger doc may contain the possible responses for a `/customers/{id}` endpoint: a `200`, a `201`, and a `404`. A developer, using `Drive` can specify the spec doc, the endpoint name, and the response code.
 
 ### Example
 
@@ -138,9 +138,9 @@ class SomeTest extends TestCase {
 }
 ```
 
-Just to clarify what is being shown above, both the `validate()` method and the `drive()` function both take the name of the vendor specified in the `drive.json` file, then the specific endpoint in question, followed by the verb or status code that should be either expected or returned.
+Just to clarify what is being shown above, the `validate()` method and the `drive()` function both take the name of the vendor specified in the `drive.json` file, then the specific endpoint in question, followed by the verb or status code that should be either expected or returned.
 
-The real benefit of auto-generating data according to spec is that we are then "contract testing", meaning we are testing based on the "promise" offered to us by the external service owner. That way, we can both dynamically use realistic responses, but we are also following the mantra "Don't mock what you don't own" and replacing it with "Mock what you are guaranteed in a contract".
+The real benefit of auto-generating data according to spec is that we are then "contract testing", meaning we are testing based on the "promise" offered to us by the external service owner. That way we can use realistic responses, but also follow the mantra "Don't mock what you don't own". Instead, we're replacing it with "Mock what you are guaranteed in a contract".
 
 ## Phase 3: Road Test
 

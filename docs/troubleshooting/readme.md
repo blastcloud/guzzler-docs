@@ -25,7 +25,7 @@ $this->guzzler->expects($this->anything())
 $this->instance->doSomething();
 ```
 
-In the example above, we add only 1 response to the queue before executing our code under test. Then in that code under test we end up calling that URL twice.
+In the example above, we added only 1 response to the queue before executing our code under test. Then in that code under test we might end up calling that URL twice.
 
 ```php 
 // In your production code
@@ -37,7 +37,7 @@ $response2 = $this->client->get('/some-url');
 
 ## Guzzler's Error Messages
 
-In order to be helpful, Guzzler `Expectations` are serialized into a user friendly list of filters added to that failed expectation. For example, the following `Expectation`
+In order to be helpful, Guzzler `Expectations` are serialized into a user-friendly list of filters that exist on a failed expectation. For example, the following `Expectation`
 
 ```php
 $this->guzzler->expects($this->once())
