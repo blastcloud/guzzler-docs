@@ -5,7 +5,7 @@ title: Helpers | Guzzler
 
 # Helpers
 
-The following helpers methods can be used in addition to `Expectations` and assertions for any custom logic or checks that need to be made.
+The following helper methods can be used in addition to `Expectations` and assertions for any custom logic or checks that need to be made.
 
 ### getHistory(?int $index, $subIndex = null)
 
@@ -30,7 +30,7 @@ $history = [
 ];
 ```
 
-Individual indexes and sub-indexes of the request can also be requested directly.
+Individual indexes and sub-indexes of the history can also be requested directly.
 
 ```php
 $second = $this->guzzler->getHistory(1);

@@ -39,8 +39,8 @@ title: Changelog | Guzzler
 
 ## [1.3.0] - Released 2019-03-24
 
-- Added `Exposition::addNamespace` method to allow users to write custom filters and override Guzzler provided filters.
-- Refactored `Exposition::__call` method to search through any user-provided namespaces for filters before using the defaults provided by Guzzler.
+- Added `Expectation::addNamespace` method to allow users to write custom filters and override Guzzler provided filters.
+- Refactored `Expectation::__call` method to search through any user-provided namespaces for filters before using the defaults provided by Guzzler.
 
 ## [1.2.1] - Released 2019-03-23
 

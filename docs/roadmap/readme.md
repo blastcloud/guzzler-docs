@@ -11,7 +11,7 @@ Second, the following is a rough idea of what I hope to build and include in pro
 
 ## Phase 1: Examples / Tutorials
 
-One thing I really didn't expect was hearing people say they would like to see how I would go about using Guzzle in real(istic) projects. Though it makes sense in retrospect it was still surprising, as I don't consider myself to be that experienced using Guzzle in lots of contexts. However, after watching the likes of Adam Wathan and others over the years who intentionally set out learning something in order to teach it to others, I'm up to the challenge and hope to have something started soon.
+One thing I really didn't expect was hearing people say they would like to see how I would go about using Guzzle in real(istic) projects. Though it makes sense in retrospect it was still surprising, as I don't consider myself to be that experienced using Guzzle in lots of contexts. However, after watching leaders like Adam Wathan and others over the years who intentionally set out learning something in order to teach it to others, I'm up to the challenge and hope to have something started soon.
 
 Currently, I have a page of "Examples" that is slowly growing. However, after completing a couple, I immediately see that examples of only the Guzzler / Test side are not really that helpful on their own. Instead, I'm going to create a new repo that is exclusively examples using different patterns and real services. The following are the intended examples and topics:
 
