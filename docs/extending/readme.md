@@ -244,7 +244,7 @@ $this->guzzler->expects($this->any())
 
 #### Registering Macros Globally
 
-You can ensure your filters are available throughout all your tests by adding the Guzzler PHPUnit extension to your `phpunit.xml` file.
+You can ensure your macros are available throughout all your tests by adding the Guzzler PHPUnit extension to your `phpunit.xml` file.
 
 ```xml
 <phpunit>
