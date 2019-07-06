@@ -61,9 +61,15 @@ public function test_add_bill_if_it_doesnt_exist()
 
 This test ensures our code is to specification, but other than the test name it’s in no way descriptive of what we are actually testing. Traversing the request objects is fiddly, and a developer new to the project would probably have little idea why it's being done.
 
+## What is Important?
+
+Whenever you work with an HTTP client package or library (no matter if it's Guzzle, anything else, or in any other language) tests tend to be based around the configuration of the library. That works, but the problem is the library used is really just an implementation detail. What's really important is the **request** the library produces, and not the configuration of your client. The request is what actually moves the use of your code forward and actually completes the integration.
+
+With this realization in mind, I felt practices like above to be tightly coupled to Guzzle and not the request. So, I wanted a way to test my use of Guzzle that was focused on the requests Guzzle produced.
+
 ## The Goal
 
-Instead, it would be nice to say exactly what we are testing for, and it would be nice to copy PHPUnit’s way of saying _“we want to ensure {x} happens {y} number of times.”_
+Instead of tightly coupling our tests to Guzzle, it would be nice to say exactly what we are testing for, and it would be nice to copy PHPUnit’s way of saying _“we want to ensure {x} happens {y} number of times.”_
 
 ```php
 // PHPUnit Invokables Syntax
@@ -73,7 +79,7 @@ $mock->expects($this->once())
     ->willReturn(/* some result */);
 ```
 
-These two ideas above, and the realization that Guzzle’s mock handler queue allows response mocks to be pushed to it’s stack at any time, lead to the creation of Guzzler.
+These two ideas above lead to the creation of Guzzler.
 
 ## After
 
