@@ -101,9 +101,9 @@ public function test_add_bill_if_it_doesnt_exist()
 {
     $bill = new Bill('some-bill-id', 'some-other-mock-data');
 
-    // Here we explicitely say we care about the times it's called, the
-    // endpoint and method, and then what response we expect back in
-    // this scenario.
+    // Here we explicitely say we care about the times a request is 
+    // made, the endpoint and method, and then what response we expect 
+    // back in this scenario.
     $this->guzzler->expects($this->once())
         ->get("/v3/company/{$this->companyId}/bill/{$bill->quickbooks_id}")
         ->willRespond(new Response(404, [], "{}");

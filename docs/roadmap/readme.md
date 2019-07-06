@@ -46,9 +46,9 @@ If there is anything specific about using Guzzle or Guzzler you'd appreciate an 
 
 [Github Issue Here](https://github.com/blastcloud/guzzler/issues/7)
 
-Originally, I thought it would be nice to build out an expectation driver for requests from a codebase to an API. That’s what lead to Guzzler. I’m happy with the majority of it, but seeing it now, I’m not a fan of how it still requires a developer to verify what their requests should look like to contact an API and also define what the response should be from the service. I’d actually prefer a generator build the responses Guzzler should queue.
+Originally, I thought it would be nice to build out an expectation driver for requests from a codebase to an API. That’s what lead to Guzzler. I’m happy with the majority of it. But I still feel that the response side is lacking. Right now, any responses the user wants returned must be built by hand each time. I’d actually prefer a generator build the responses Guzzler should queue.
 
-With open specifications like Swagger/OpenAPI, RAML, and API Blueprint, there’s no reason why developers should have to build out their own response objects. Instead, I envision a factory syntax similar to Laravel’s model factories for use in tests. Rather than creating an ORM model, it would create a Response object with the fields, body, headers, and status code specified in a vendor’s Spec document. For example, a Swagger doc may contain the possible responses for a `/customers/{id}` endpoint: a `200`, a `201`, and a `404`. A developer, using `Drive` can specify the spec doc, the endpoint name, and the response code.
+With open specifications like Swagger/OpenAPI, RAML, and API Blueprint, there’s no reason why developers should have to build out their own response objects. Instead, I envision a factory syntax similar to [Laravel’s model factories](https://laravel.com/docs/5.8/seeding#using-model-factories) for use in tests. Rather than creating an ORM model, `Drive` would create a Response object with the fields, body, headers, and status code specified in a vendor’s spec document. For example, a Swagger doc may contain the possible responses for a `/customers/{id}` endpoint: a `200`, a `201`, and a `404`. A developer, using `Drive` can specify the spec doc, the endpoint name, and the response code.
 
 ### Example
 
