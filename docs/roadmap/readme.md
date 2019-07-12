@@ -33,10 +33,10 @@ class SomeTest extends TestCase {
     {
         // ...
         $this->guzzler->expects($this->once())
-            ->get(‘some-url’)
+            ->get('some-url')
             ->withQuery([
-                “first” => “value”,
-                “second” => “another”
+                'first' => 'value',
+                'second' => 'another'
             ]);
     }
 }
@@ -52,10 +52,10 @@ class SomeTest extends TestCase {
     {
         // ...
         $this->hybrid->expects($this->once())
-            ->get(‘some-url’)
+            ->get('some-url')
             ->withQuery([
-                “first” => “value”,
-                “second” => “another”
+                'first' => 'value',
+                'second' => 'another'
             ]);
     }
 }
@@ -77,10 +77,10 @@ class SomeTest extends TestCase {
     {
         // ...
         $this->eureka->expects($this->once())
-            ->get(‘some-url’)
+            ->get('some-url')
             ->withQuery([
-                “first” => “value”,
-                “second” => “another”
+                'first' => 'value',
+                'second' => 'another'
             ]);
     }
 }
