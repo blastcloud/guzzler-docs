@@ -318,7 +318,7 @@ $this->guzzler->expects($this->once())
     ]);
 ```
 
-By default, this method only checks that the specified parameters exist somewhere in the request URL, but more may exist. An boolean `true` can be passed as the second argument to instead cause a failure if additional parameters are found.
+By default, this method only checks that the specified parameters exist somewhere in the request URL, but more may exist. A boolean `true` can be passed as the second argument to instead cause a failure if additional parameters are found.
 
 ```php
 // Example URL: http://example.com/api/v2/customers?from=15&to=25&format=xml
