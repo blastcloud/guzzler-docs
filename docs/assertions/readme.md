@@ -70,7 +70,7 @@ $this->guzzler->assertFirst(function (Expectation $e) {
 
 ### assertNotFirst(Closure $expect, $message = null)
 
-Assert that the first request in history does not meet the expectation defined. The first argument should be a closure that receives an `Expectation` and an optional error message can be passed as the second argument.
+Assert that the first request in history does not meet the expectation returned. The first argument should be a closure that receives an `Expectation` and an optional error message can be passed as the second argument.
 
 ```php
 $this->guzzler->assertNotFirst(function ($expect) {
@@ -90,7 +90,7 @@ $this->guzzler->assertLast(function ($expect) {
 
 ### assertNotLast(Closure $expect, $message = null)
 
-Assert that the last request in history does not meet the expectation passed. The first argument should be a closure that receives an `Expectation` and an optional error message can be passed as the second argument.
+Assert that the last request in history does not meet the expectation returned. The first argument should be a closure that receives an `Expectation` and an optional error message can be passed as the second argument.
 
 ```php
 $this->guzzler->assertNotLast(function ($expect) {

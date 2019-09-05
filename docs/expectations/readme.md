@@ -8,7 +8,7 @@ title: Expectations | Guzzler
 Expectations are the main way for you to define what you want Guzzler to search for through your Guzzle client's history. They are used in two separate ways:
 
 - To define the number of times you expect a match to be made before you test your code.
-- To assert what Guzzler should search for in your client's history after you test your code.
+- To assert what Guzzler should search for in your client's history after your code is run.
 
 ### expects(InvokedRecorder $times, $message = null)
 
@@ -21,7 +21,7 @@ public function testExample()
 }
 ```
 
-> All methods on expectations are chainable and can lead directly into another method. `$expectation->oneMethod()->anotherMethod()->stillAnother();`
+> All methods on expectations are chainable and can lead directly into the next method. `$expectation->oneMethod()->anotherMethod()->stillAnother();`
 
 ## Available Methods
 
@@ -68,7 +68,7 @@ $this->guzzler->expects($this->once())
     ->endpoint("/some-url", "GET");
 ```
 
-The following convenience verb methods are available to shorten your code. `get`, `post`, `put`, `delete`,  `patch`, `options`.
+The following convenience verb methods are available to shorten your code. `get`, `post`, `put`, `delete`,  `patch`, and `options`.
 
 ```php
 $this->guzzler->expects($this->any())
@@ -93,11 +93,11 @@ $this->guzzler->expects($this->once())
     ->withBody("some body string");
 ```
 
-By default, this method simply checks that the specified body exists somewhere in the request body. By passing a boolean `true` as the second argument, the method will instead make a strict comparison.
+By default, this method simply checks that the specified body exists somewhere in the request body but more text may exist. By passing a boolean `true` as the second argument, the method will determine if the body equals the request.
 
 ### withCallback(Closure $callback, string $message = null)
 
-You can pass a custom, anonymous method to do ad hoc, on-the-fly, determining if a history item fits your conditions. Your closure should expect a Guzzle history array, and return `true` or `false` on whether or not the history item passes your test. A Guzzle history item is an array with the following structure:
+You can pass an anonymous method to do on-the-fly logic to determine if a history item fits your concerns. Your closure should expect a Guzzle history array, and return a boolean. A Guzzle history item is an array with the following structure:
 
 ```php
 // Guzzle history item structure
@@ -117,7 +117,7 @@ $this->guzzler->expects($this->once())
 ```
 
 ::: tip
-By default, the error message for a callback is simply "Custom callback: \Closure". It's recommended you pass your own message as the second argument to make a more descriptive error about what exactly your closure was testing.
+By default, the error message for a callback is simply "Custom callback: \Closure". It's recommended you pass your own message as the second argument to make a more descriptive failure.
 :::
 
 ### withFile(string $fieldName, File $file)
@@ -157,7 +157,7 @@ $this->guzzler->expects($this->once())
     ->withFile('avatar', $file);
 ```
 
-The `File` class can accept two different ways to specify `contents`:
+The `File` class can accept `contents` in two different ways:
 
 1. The string contents are given directly.
 2. A resource, such as `fopen()`, is given.
@@ -168,7 +168,7 @@ Because the file given resolves down to an in-memory comparison, it's a good ide
 
 ### withFiles(array $files, bool $exclusive = false)
 
-As a shorthand for passing multiple `withFile()` calls, you can pass an associative array of field names with `File` instances as the values.
+As a shorthand for passing multiple `withFile()` calls, you can provide an associative array of field names with `BlastCloud\Guzzler\Helpers\File` instances as the values.
 
 ```php
 $this->guzzler->expects($this->once())
@@ -179,11 +179,11 @@ $this->guzzler->expects($this->once())
     ]);
 ```
 
-By default, this method simply checks that the specified files exist somewhere in the request. By passing a boolean `true` as the second argument, the method will instead cause a failure if additional files are found in the request.
+By default, this method simply checks that the specified files exist somewhere in the request, but more may exist. By passing a boolean `true` as the second argument, the method will instead cause a failure if additional files are found in the request.
 
 ### withForm(array $formFields, bool $exclusive = false)
 
-You can expect a specific set of form fields in the body of a post. As of `1.2.1`, this method works with both URL encoded and multipart forms. 
+You can expect a specific set of form fields in the body of a post. This method works with both URL encoded and multipart forms. 
 
 ```php
 $this->guzzler->expects($this->once())
@@ -193,16 +193,16 @@ $this->guzzler->expects($this->once())
     ]);
 ```
 
-By default, this method simply checks that all specified fields and values exist in the request body, but more may exist. By passing a boolean `true` as the second argument, the method will instead make a strict comparison.
+By default, this method simply checks that all specified fields and values exist in the request body, but more may exist. By passing a boolean `true` as the second argument, the method will instead cause a failure if additional fields are found.
 
 ### withFormField(string $key, $value)
 
-You can expect a specific form field in the body of a post. As of `1.2.1`, this method works with both URL encoded and multipart forms.
+You can expect a specific form field in the body of a post. This method works with both URL encoded and multipart forms.
 
 ```php
 $this->guzzler->expects($this->once())
     ->withFormField('first-name', 'John')
-    ->withFormField('last-name', 'Snow');
+    ->withFormField('house-name', 'Snow');
 ```
 
 ### withHeader(string $key, string|array $value)
@@ -214,17 +214,16 @@ $this->guzzler->expects($this->once())
     ->withHeader("Authorization", "some-access-token");
 ```
 
-You can chain together multiple calls to `withHeader()` to individually add different headers. Headers can also be an array of values.
+Headers can also be an array of values.
 
 ```php
 $this->guzzler->expects($this->once())
-    ->withHeader("Accept-Encoding", ["gzip", "deflate"])
-    ->withHeader("Accept", "application/json");
+    ->withHeader("Accept-Encoding", ["gzip", "deflate"]);
 ```
 
 ### withHeaders(array $headers)
 
-As a shorthand for multiple `withHeader()` calls, you can pass an array of header keys and values to `withHeaders()`.
+As a shorthand for multiple `withHeader()` calls, you can pass an array of header keys and values.
 
 ```php
 $this->guzzler->expects($this->once())
@@ -242,7 +241,6 @@ You can expect a certain `JSON` body on a request by passing an array of data to
 $this->guzzler->expects($this->once())
     ->withJson(['first' => 'value', 'second' => 'another']);
 ```
-<br />
 
 ::: tip Be Aware
 This method tests that the passed array exists on the request by first recursively sorting all keys and values in both the request body and the `$json` argument and then making a string comparison.
@@ -274,28 +272,20 @@ $this->guzzler->expects($this->once())
     ->withJson(['second' => 'second value']);
 ```
 
-By default, this method checks only that the passed array of values exists somewhere in the request body. To make an exclusive comparison so that only the data passed exists on the request body, a boolean `true` can be passed as the second argument.
+By default, this method checks only that the passed array of values exists somewhere in the request body, but more text may exist. A boolean `true` can be passed as the second argument to instead cause a failure if the body does not equal the json specified.
 
 ### withOption(string $name, string $value)
 
-You can expect a certain Guzzle Client/Request option by passing a name and value to this method.
+You can expect a certain Client option by passing a name and value to this method.
 
 ```php
 $this->guzzler->expects($this->once())
     ->withOption('stream', true);
 ```
 
-You can chain together multiple calls to `withOption` to individually add more option values.
-
-```php
-$this->guzzler->expects($this->once())
-    ->withOption('stream', true)
-    ->withOption('allow_redirects', false);
-```
-
 ### withOptions(array $options)
 
-As a shorthand for multiple `withOption()` calls, you can pass an array of option keys and values to `withOptions()`.
+As a shorthand for multiple `withOption()` calls, you can pass an array of option keys and values.
 
 ```php
 $this->guzzler->expects($this->once())
@@ -316,12 +306,11 @@ $this->guzzler->expects($this->once())
 
 ### withQuery(array $query, $exclusive = false)
 
-You can expect a set of query parameters to appear in the URL of the request by passing an array of key value pairs to match in the URL. The order of query parameters is not considered, and by default any additional parameters included in the URL are ignored.
+You can expect a set of query parameters to appear in the URL of the request by passing an array of key/value pairs to match in the URL. The order of query parameters is not considered.
 
 ```php
 // Example URL: http://example.com/api/v2/customers?from=15&to=25&format=xml
 
-// By default the 'format' parameter is ignored
 $this->guzzler->expects($this->once())
     ->withQuery([
         'to' => 25,
@@ -329,7 +318,7 @@ $this->guzzler->expects($this->once())
     ]);
 ```
 
-To enforce only the URL parameters you specify, a boolean `true` can be passed as the second argument.
+By default, this method only checks that the specified parameters exist somewhere in the request URL, but more may exist. An boolean `true` can be passed as the second argument to instead cause a failure if additional parameters are found.
 
 ```php
 // Example URL: http://example.com/api/v2/customers?from=15&to=25&format=xml
