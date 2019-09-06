@@ -15,7 +15,13 @@ module.exports = {
         logo: '/img/guzzler-logo.svg',
         nav: [
             { text: 'Home', link: '/'},
-            { text: 'Why', link: '/why/'}
+            { text: 'Why', link: '/why/'},
+            {
+                text: 'Ecosystem',
+                items: [
+                    {text:'Hybrid', link:'https://hybrid.guzzler.dev'}
+                ]
+            }
         ],
         sidebar: [
             {
