@@ -26,7 +26,7 @@ One thing I really didn't expect was hearing people say they would like to see h
 
 Currently, I have a page of "Examples" that is slowly growing. However, after completing a couple, I immediately see that examples of only the Guzzler / Test side are not really that helpful on their own. Instead, I'm going to create a new repo that is exclusively examples using different patterns and real services.
 
-## Phase 2: Drive
+## Drive
 
 Originally, I thought it would be nice to build out an expectation driver for requests from a codebase to an API. That’s what lead to Guzzler. I’m happy with the majority of it. But I still feel that the response side is lacking. Right now, any responses the user wants returned must be built by hand each time. I’d actually prefer a generator build the responses Guzzler should queue.
 
@@ -124,7 +124,7 @@ Just to clarify what is being shown above, the `validate()` method and the `driv
 
 The real benefit of auto-generating data according to spec is that we are then "contract testing", meaning we are testing based on the "promise" offered to us by the external service owner. That way we can use realistic responses, but also follow the mantra "Don't mock what you don't own". Instead, we're replacing it with "Mock what you are guaranteed in a contract".
 
-## Phase 3: Road Test
+## Road Test
 
 Finally, I'd like to build out an automated way to prove our code is handling all important interactions with a service we care to support. This would be most like a code coverage report for endpoint usage on an API. Ideally, a developer can specify what endpoints they want to cover from the defined specifications, and this report would listen for "drives” - generated responses - for the specified endpoints. It would keep track of which ones are used and which are not, and generate an HTML report of which endpoints were not used but were supposed to be.
 
