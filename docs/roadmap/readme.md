@@ -11,13 +11,13 @@ Thanks everyone for the Github stars, downloads, and retweets for these project.
 
 | Project | Status | Difficulty |
 |---------|--------|------------|
-| [Hybrid](https://github.com/blastcloud/hybrid) (Symfony port of Guzzler) | Relesed :white_check_mark: | N/A |
-| [Hybrid Documentation](https://hybrid.guzzler.dev) | Released :white_check_mark: | N/A |
-| [Chassis](https://github.com/blastcloud/chassis) (Expectation Engine from Guzzler) | Released :white_check_mark: | N/A |
-| Chassis Documentation | In-progress :clock3: | Easy |
-| Driver's Ed | To-do (Research in progress) :x: | Unknown |
-| Drive | To-do :x: | Medium / Difficult |
-| Road Test | To-do :x: | Easy / Medium |
+| [Hybrid](https://github.com/blastcloud/hybrid) (Symfony port of Guzzler) | :white_check_mark: Released | N/A |
+| [Hybrid Documentation](https://hybrid.guzzler.dev) | :white_check_mark: Released | N/A |
+| [Chassis](https://github.com/blastcloud/chassis) (Expectation Engine from Guzzler) | :white_check_mark: Released | N/A |
+| Chassis Documentation | :clock3: In Progress | Easy |
+| Driver's Ed | :x: To-do (Research in progress) | Unknown |
+| Drive | :x: To-do | Medium / Difficult |
+| Road Test | :x: To-do | Easy / Medium |
 
 
 ## Phase 1: Examples / Tutorials
