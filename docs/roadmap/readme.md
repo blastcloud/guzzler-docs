@@ -20,42 +20,13 @@ Thanks everyone for the Github stars, downloads, and retweets for these project.
 | Road Test | :x: To-do | Easy / Medium |
 
 
-## Phase 1: Examples / Tutorials
+## Examples / Tutorials
 
 One thing I really didn't expect was hearing people say they would like to see how I would go about using Guzzle in real(istic) projects. Though it makes sense in retrospect it was still surprising, as I don't consider myself to be that experienced using Guzzle in lots of contexts. However, after watching leaders over the years who intentionally set out learning something in order to teach it to others, I'm up to the challenge and hope to have something started soon.
 
-Currently, I have a page of "Examples" that is slowly growing. However, after completing a couple, I immediately see that examples of only the Guzzler / Test side are not really that helpful on their own. Instead, I'm going to create a new repo that is exclusively examples using different patterns and real services. The following are the intended examples and topics:
-
-- GET service. Based off the current example for Google Maps Static image.
-  - Should include option for multiple markers of different styles
-  - Should include option for streetview
-  - Should include reason for making a "service", as it really is just a bunch of getters
-  - Should include async by default and only include `wait()` as optional implementation detail. Mention that Guzzle works the same way under the hood.
-  - Mention that it can be mixed with the multi-part file POST to S3 or Flysystem if desired
-- POST data to Stripe.
-  - Try going with a repository pattern to illustrate that it makes sense to think of some services that involve multiple verbs as CRUD models
-  - Because most of the functionality of the repository is similar or even shared, build each out of an abstract or base class
-  - Really build out the error handling with this one because there are so many different errors or validation issues that can occur
-- Service based push
-  - The idea here is to set off some kind of process handled by a third-party, and we don't expect an immediate answer
-  - Examples could be:
-    - SMS: Nexmo
-    - Email: SendGrid
-    - Log: Rollbar
-    - Notification: Slack
-- Error Handling
-  - This one deserves an explanation separate from everything else, but the error handling itself should be built into the other examples
-  - Give multiple options for how errors should be handled
-    - Events
-    - Introspection
-    - Logging
-- Consider naming the project `Driver's Ed`
-
-If there is anything specific about using Guzzle or Guzzler you'd appreciate an example or tutorial on, please [create an issue](https://github.com/blastcloud/guzzler/issues) on the project. Any feedback helps.
+Currently, I have a page of "Examples" that is slowly growing. However, after completing a couple, I immediately see that examples of only the Guzzler / Test side are not really that helpful on their own. Instead, I'm going to create a new repo that is exclusively examples using different patterns and real services.
 
 ## Phase 2: Drive
-
-[Github Issue Here](https://github.com/blastcloud/guzzler/issues/7)
 
 Originally, I thought it would be nice to build out an expectation driver for requests from a codebase to an API. That’s what lead to Guzzler. I’m happy with the majority of it. But I still feel that the response side is lacking. Right now, any responses the user wants returned must be built by hand each time. I’d actually prefer a generator build the responses Guzzler should queue.
 
@@ -154,8 +125,6 @@ Just to clarify what is being shown above, the `validate()` method and the `driv
 The real benefit of auto-generating data according to spec is that we are then "contract testing", meaning we are testing based on the "promise" offered to us by the external service owner. That way we can use realistic responses, but also follow the mantra "Don't mock what you don't own". Instead, we're replacing it with "Mock what you are guaranteed in a contract".
 
 ## Phase 3: Road Test
-
-[Github Issue Here](https://github.com/blastcloud/guzzler/issues/8)
 
 Finally, I'd like to build out an automated way to prove our code is handling all important interactions with a service we care to support. This would be most like a code coverage report for endpoint usage on an API. Ideally, a developer can specify what endpoints they want to cover from the defined specifications, and this report would listen for "drives” - generated responses - for the specified endpoints. It would keep track of which ones are used and which are not, and generate an HTML report of which endpoints were not used but were supposed to be.
 
