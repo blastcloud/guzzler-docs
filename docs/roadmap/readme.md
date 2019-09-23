@@ -5,92 +5,20 @@ title: Roadmap | Guzzler
 
 # Roadmap
 
-First off, thank you all for the Github stars and downloads. It’s been extremely gratifying to see that something I built - trying to solve my own problem - has been not only liked but used by other developers around the world, and continues to grow each day.
+Thanks everyone for the Github stars, downloads, and retweets for these project. Below is a current look at my roadmap for Guzzler, Hybrid, Chassis and related projects.
 
-Second, the following is a rough idea of what I hope to build and include in projects adjacent to Guzzler. Everything listed below is planned, but not set in stone. Furthermore, I would love feedback on either parts of the plan you like, or areas that it could be improved. There will be Github issues created for different points of the plan below and links will be included. If you like the idea, please leave a thumbs up on the issue(s), or if there is something you think could work better, please leave a comment.
+## TL;DR.
 
-## [Update] Phase 0.5: Hybrid
+| Project | Status | Difficulty |
+|---------|--------|------------|
+| [Hybrid](https://github.com/blastcloud/hybrid) (Symfony port of Guzzler) | Relesed :white_check_mark: | N/A |
+| [Hybrid Documentation](https://hybrid.guzzler.dev) | Released :white_check_mark: | N/A |
+| [Chassis](https://github.com/blastcloud/chassis) (Expectation Engine from Guzzler) | Released :white_check_mark: | N/A |
+| Chassis Documentation | In-progress :clock3: | Easy |
+| Driver's Ed | To-do (Research in progress) :x: | Unknown |
+| Drive | To-do :x: | Medium / Difficult |
+| Road Test | To-do :x: | Easy / Medium |
 
-After a kind coworker - [Chris Holland](https://twitter.com/chrisholland) - with a sizable following in the Symfony community tweeted about this project, I received very positive feedback and a couple requests to make a version of Guzzler that would work with the upcoming [HttpClient](https://github.com/symfony/http-client). I had mentioned to Chris beforehand that I was floating the idea of supporting HttpClient, if for no other reason than I feel like any client library could benefit from an abstraction layer when working with tests. However, after receiving such a warm reception I decided to immediately jump into making that integration.
-
-### First Steps
-
-There is a big problem with the current codebase of Guzzler before Symfony could be supported. The `composer.json` configuration requires Guzzle as a dependency. If the library were to support multiple clients, it would make sense to remove that dependency, but there is no great way I currently know of to support dynamic requirements for dependencies. At the same time, I don’t want to make any changes that could affect backwards compatibility with Guzzler yet. It’s still a young project. So, instead, I’m abstracting out the expectation engine into a separate project that both Guzzler and the new project can require as a dependency. That way, each can have their separate composer dependencies without affecting each other.
-
-### Chassis and Hybrid
-
-Continuing with the “Gas Guzzler” car theme, the new projects will be called `Chassis` and `Hybrid`. Chassis will be the expectation engine that handles recording history, making assertions and expectations, and any console error handling when an expectation fails. Again, Chassis will become a dependency of both Guzzler and Hybrid, so that a common core can be shared between projects and any new additions to that core will immediately be available for both projects. 
-
-The main way Guzzler and Hybrid will differ is mostly the filters used inside each. The expectation engine can support an infinite number of filters, and can dynamically find them given a namespace to look through. Because of this, any integration built on top of Chassis mostly just requires a new set of filters, and anything specific to the client that is not shared with other clients.
-
-##### Guzzler
-
-```php
-class SomeTest extends TestCase {
-    use UsesGuzzler;
-
-    public function someTest()
-    {
-        // ...
-        $this->guzzler->expects($this->once())
-            ->get('some-url')
-            ->withQuery([
-                'first' => 'value',
-                'second' => 'another'
-            ]);
-    }
-}
-```
-
-##### Hybrid
-
-```php
-class SomeTest extends TestCase {
-    use UsesHybrid;
-
-    public function someTest()
-    {
-        // ...
-        $this->hybrid->expects($this->once())
-            ->get('some-url')
-            ->withQuery([
-                'first' => 'value',
-                'second' => 'another'
-            ]);
-    }
-}
-```
-
-As the examples above show, the only real difference should be the base variable object name on the test class, and the trait that is used. Though this could be inconvenient if your project ever needed to switch from one to the other, the changes should be minimal.
-
-In the same vein, I also plan to provide an **optional** ability to set the name on the class you’d like to use, using a constant on your test class. If this constant exists, the trait will use the name given, and will otherwise default to the name of the package being used.
-
-**Example**
-
-```php
-class SomeTest extends TestCase {
-    use UsesGuzzler;  // Or UsesHybrid
-
-    const CHASSIS_ENGINE_NAME = ‘eureka’;
-
-    public function someTest()
-    {
-        // ...
-        $this->eureka->expects($this->once())
-            ->get('some-url')
-            ->withQuery([
-                'first' => 'value',
-                'second' => 'another'
-            ]);
-    }
-}
-```
-
-#### Timeline
-
-**Chassis:** As of right now, most of the code changes for Chassis are complete. A handful of code changes are still needed to make the core not Guzzle specific, and then I need to make a logo and write up the documentation. Right now I’m aiming for August 1st as a go-live date. That will also mean a new version of Guzzler (1.5.3) that will make Chassis a new dependency, and replace the original expectation engine with Chassis’.
-
-**Hybrid:** Though I have a repo for the project and I know what I want to logo to be, the project still has not really started. Because it will depend on Chassis. That project must be completed, or near enough completed first. This is just a guess, but I’m hoping to have the documentation and everything built up and ready by mid to late August.
 
 ## Phase 1: Examples / Tutorials
 
