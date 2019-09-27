@@ -1,5 +1,5 @@
 module.exports = {
-    description: "The official documentation for the Guzzler testing framework.",
+    description: "Supercharge your PHP app or SDK with a declarative testing library specifically for Guzzle.",
     head: [
         ['link', {rel:"manifest", href:"/manifest.json"}],
         ['meta', {name: 'twitter:card', content: 'summary'}],
