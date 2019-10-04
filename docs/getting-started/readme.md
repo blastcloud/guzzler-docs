@@ -63,3 +63,42 @@ $client = new Client([
     "handler" => $stack
 ]);
 ```
+
+## Custom Engine Name
+
+Guzzler allows you to customize the variable name of the engine, if you prefer to not use "guzzler". To use a custom name, add a constant to the class called `ENGINE_NAME` with the value set to the variable name you'd prefer.
+
+```php
+use BlastCloud\Guzzler\UsesGuzzler;
+
+class SomeTest extends TestCase
+{
+    use UsesGuzzler;
+
+    public $client;
+    
+    // Here we define what we want the engine name to be.
+    const ENGINE_NAME = 'engine';
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        // Here, $this->guzzler has been renamed
+        // to $this->engine
+        $this->client = $this->engine->getClient([
+            'base_uri' => 'https://some-url.com/api/v2'
+        ]);
+    }
+
+    public function testSomething()
+    {
+        $this->engine->expects($this->once())
+            ->get('/some/api/url');
+        
+        // ...
+    }
+}
+```
+
+The main benefit of using a custom engine name is to abstract as much code as possible. Though it's not likely you'll have a conflicting variable named "guzzler", it's a possibility that is covered.
