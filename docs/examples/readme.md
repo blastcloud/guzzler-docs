@@ -142,8 +142,8 @@ We might also decide there are a few other ways we want to test our markers. The
 
 ```php
 // In our test suite
-use BlastCloud\Guzzler\Filters\Base;
-use BlastCloud\Guzzler\Interfaces\With;
+use BlastCloud\Chassis\Filters\Base;
+use BlastCloud\Chassis\Interfaces\With;
 
 class WithMarker extends Base implements With
 {
