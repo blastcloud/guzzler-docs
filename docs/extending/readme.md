@@ -38,8 +38,8 @@ To accomplish this, we can first build out a class like the following:
 
 namespace tests\GuzzlerFilters;
 
-use BlastCloud\Guzzler\Filters\Base;
-use BlastCloud\Guzzler\Interfaces\With;
+use BlastCloud\Chassis\Filters\Base;
+use BlastCloud\Chassis\Interfaces\With;
 
 class WithUser extends Base Implements With
 {

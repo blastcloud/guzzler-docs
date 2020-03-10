@@ -33,20 +33,23 @@ public function testExample()
         <a href="#withbody-string-body-bool-exclusive-false">withBody</a><br />
         <a href="#withcallback-closure-callback-string-message-null">withCallback</a><br />
         <a href="#withfile-string-fieldname-file-file">withFile</a><br />
+        <a href="#withfiles-array-files-bool-exclusive-false">withFiles</a><br />
     </p>
     <p>
-        <a href="#withfiles-array-files-bool-exclusive-false">withFiles</a><br />
         <a href="#withform-array-formfields-bool-exclusive-false">withForm</a><br />
         <a href="#withformfield-string-key-value">withFormField</a><br />
         <a href="#withheader-string-key-string-array-value">withHeader</a><br />
         <a href="#withheaders-array-headers">withHeaders</a><br />
-    </p>
-    <p>
         <a href="#withjson-array-json-bool-exclusive-false">withJson</a><br />
         <a href="#withoption-string-name-string-value">withOption</a><br />
+    </p>
+    <p>
         <a href="#withoptions-array-options">withOptions</a><br />
         <a href="#withprotocol-protocol">withProtocol</a><br />
         <a href="#withquery-array-query-exclusive-false">withQuery</a><br />
+        <a href="#withquerykey-string-key">withQueryKey</a><br/>
+        <a href="#withquerykeys-array-keys">withQueryKeys</a><br />
+        <a href="#withoutquery">withoutQuery</a>
     </p>
 </div>
 
@@ -329,4 +332,53 @@ $this->guzzler->expects($this->once())
         'to' => 25,
         'from' => 15
     ], true);
+```
+
+### withQueryKey(string $key)
+
+You can specify just the key for a query item, if you either don't care about the value or there is none. For example, ElasticSearch sometimes has a query key but no following value.
+
+```php
+// Example URL: http://some-elasticsearch-url?_delete_by_query
+
+$this->guzzler->expects($this->once())
+    ->withQueryKey('_delete_by_query');
+```
+
+::: tip Be Aware
+If you have a query variable that should have no value, like the example shown above, you must specify it in the raw request URL string. Adding it to a `query` variable in the request will force it to become a `0` indexed value, rather than a key.
+:::
+
+```php
+// Doing this
+$this->client->get('/url', [
+    'query' => [
+        'first' => 'value',
+        'second'
+    ]
+]);
+
+// Will cause Guzzle to make a query like this
+// http://url?first=value&0=second
+
+// This will work as intended though.
+$this->client->get('/url?first=value&second');
+```
+
+### withQueryKeys(array $keys)
+
+You can specify just the keys you want to appear in the query, but not specifically check any values they may have.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withQueryKeys(['first', 'second']);
+```
+
+### withoutQuery()
+
+If you'd like to ensure no query string is provided in the request at all, this method can be used.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withoutQuery();
 ```
