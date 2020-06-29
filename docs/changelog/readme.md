@@ -4,6 +4,9 @@ title: Changelog | Guzzler
 ---
 # Changelog
 
+## [2.0.0] - 2020-06-28
+- Updated to support Guzzle 7
+
 ## [1.6.1] - 2020-03-09
 - Update to support PHPUnit 9
 - Drop support for PHPUnit below 8.2
