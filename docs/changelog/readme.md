@@ -4,6 +4,11 @@ title: Changelog | Guzzler
 ---
 # Changelog
 
+## [2.0.1] - 2020-12-04
+- Update to test PHP 8.0
+- Updated dependencies
+- Moving CI to Github Actions
+
 ## [2.0.0] - 2020-06-28
 - Updated to support Guzzle 7
 
