@@ -1,7 +1,7 @@
 ---
 title: Guzzler | Official Documentation
 lang: en-US
-footer: MIT Licensed | Copyright © 2019-present Adam Kelso
+footer: MIT Licensed | Copyright © 2022-present Adam Kelso
 layout: HomeLayout
 ---
 

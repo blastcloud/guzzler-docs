@@ -7,7 +7,7 @@ title: Getting Started | Guzzler
 
 ## Requirements
 
-1. PHP 7.2+
+1. PHP 7.4+
 2. Guzzle 6 or 7
 3. PHPUnit 8.2+
 

@@ -42,14 +42,15 @@ public function testExample()
         <a href="#withheaders-array-headers">withHeaders</a><br />
         <a href="#withjson-array-json-bool-exclusive-false">withJson</a><br />
         <a href="#withoption-string-name-string-value">withOption</a><br />
+        <a href="#withoptions-array-options">withOptions</a><br />
     </p>
     <p>
-        <a href="#withoptions-array-options">withOptions</a><br />
         <a href="#withprotocol-protocol">withProtocol</a><br />
         <a href="#withquery-array-query-exclusive-false">withQuery</a><br />
         <a href="#withquerykey-string-key">withQueryKey</a><br/>
         <a href="#withquerykeys-array-keys">withQueryKeys</a><br />
-        <a href="#withoutquery">withoutQuery</a>
+        <a href="#withoutquery">withoutQuery</a><br />
+        <a href="#withrpc-string-url-string-method-array-params-string-id-null">withRpc</a><br />
     </p>
 </div>
 
@@ -381,4 +382,13 @@ If you'd like to ensure no query string is provided in the request at all, this 
 ```php
 $this->guzzler->expects($this->once())
     ->withoutQuery();
+```
+
+### withRpc(string $url, string $method, array $params, ?string $id = null)
+
+You can specify the body of the request matches the 2.0 version of the [JSON-RPC](https://www.jsonrpc.org/specification) spec.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withRpc('/rpc-endpoint', 'format', ['first' => 'value', 'second' => 'another'], 42);
 ```

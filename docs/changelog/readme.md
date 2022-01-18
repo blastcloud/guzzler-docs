@@ -4,6 +4,12 @@ title: Changelog | Guzzler
 ---
 # Changelog
 
+## [2.0.2] - 2022-01-17
+- Adding a new filter `withRpc`, to ensure the request properly fits the JSONRPC spec.
+  - Thanks `@webdevium` for the pull request.
+- Testing on PHP 8.1
+- Drops support for PHP versions below 7.4
+
 ## [2.0.1] - 2020-12-04
 - Update to test PHP 8.0
 - Updated dependencies

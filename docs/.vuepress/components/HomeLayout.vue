@@ -1,7 +1,7 @@
 <template>
     <div class="home">
 
-        <p align="center">
+        <p style="text-align: center;">
             <img src="/img/guzzler-logo.svg" alt="Guzzler Logo" style="max-width: 600px;" />
         </p>
 
